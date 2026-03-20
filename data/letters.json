@@ -56,6 +56,63 @@
           "dividerFlower": "🪻"
         }
       }
+    },
+    {
+      "id": "letter-1774048544314",
+      "number": 2,
+      "template": "classic",
+      "envelope": {
+        "icon": "❤️",
+        "title": "Somewhere Between Us",
+        "subtitle": "Not just friends… not quite lovers… but something that feels right",
+        "color": "#fce4ec",
+        "borderColor": "#d4bcc4"
+      },
+      "style": {
+        "font": "Great Vibes",
+        "accentColor": "#bf3bae",
+        "titleColor": "#bf3bae",
+        "bodyColor": "#f273db",
+        "headerGradientFrom": "#ffffff",
+        "headerGradientTo": "#fce4ec",
+        "tearColor": "#fce4ec"
+      },
+      "content": {
+        "date": "auto",
+        "title": "A Little Confession Wrapped in Smiles ✨",
+        "salutation": "Cutieee 💗",
+        "paragraphs": [
+          "I don’t really know what to call *us* yet… but I know that whatever this is, it makes my days softer and my nights a little brighter 🌙✨",
+          "It’s funny how we started so casually, just talking, laughing, sharing random little things… and now somehow, you’ve become someone I look forward to every single day 💬💞",
+          "There’s this comfort in you… like I don’t have to pretend, don’t have to try too hard. I can just be me and somehow, that feels enough when I’m with you 🤍",
+          "Maybe we’re not labeling it yet, maybe we’re just floating somewhere in between… but I won’t lie I really, really like being here with you 🫶",
+          "And if this “in-between” slowly turns into something more someday… I think I’d like that a lot 🌸"
+        ],
+        "signOff": "Always a little more yours than I admit 🌼",
+        "name": "Sunflower 🌻",
+        "decorations": {
+          "topFlowers": [
+            "🪻",
+            "💜",
+            "🌸",
+            "🌻"
+          ],
+          "bottomFlowers": [
+            "🌷",
+            "🪻",
+            "🌷",
+            "🌻"
+          ],
+          "cornerFlowers": [
+            "🌸",
+            "🪻",
+            "✨",
+            "💜",
+            "🥰"
+          ],
+          "dividerFlower": "🌻"
+        }
+      }
     }
   ]
 }
