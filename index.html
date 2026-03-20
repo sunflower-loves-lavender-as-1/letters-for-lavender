@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For You 💜</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Dancing+Script:wght@500;700&family=Satisfy&family=Great+Vibes&family=Pacifico&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="bg-petals" id="petals"></div>
+
+    <!-- LOCK SCREEN -->
+    <div id="lock-screen">
+        <span class="lock-decor" style="top:8%;left:6%;animation-delay:0s">🌸</span>
+        <span class="lock-decor" style="top:12%;right:8%;animation-delay:1s">💜</span>
+        <span class="lock-decor" style="bottom:15%;left:8%;animation-delay:2s">✨</span>
+        <span class="lock-decor" style="bottom:18%;right:6%;animation-delay:.5s">🌿</span>
+        <span class="lock-decor" style="top:35%;left:3%;animation-delay:1.5s">🪻</span>
+        <span class="lock-decor" style="top:45%;right:3%;animation-delay:2.5s">🌷</span>
+        <div class="lock-flower">🪻</div>
+        <h1 class="lock-title">This is just for you</h1>
+        <p class="lock-sub">Enter the secret to step inside ✨</p>
+        <div class="lock-input-wrap">
+            <input type="password" class="lock-input" id="pw-input" placeholder="Your secret key…" autocomplete="off"
+                autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')tryUnlock()">
+            <button class="eye-btn" onclick="toggleEye()" aria-label="Show/hide">👁</button>
+        </div>
+        <button class="unlock-btn" onclick="tryUnlock()">Open with Love 💜</button>
+        <p class="lock-error-msg" id="lock-err">That doesn't seem right… try again 🥺</p>
+    </div>
+
+    <!-- MAIN -->
+    <div id="main">
+        <header class="site-header">
+            <h1>For You, Always 🪻</h1>
+            <p>a little world built just for you</p>
+        </header>
+        <nav class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('letters',0)">💌 Letters</button>
+            <button class="nav-tab" onclick="switchTab('vlogs',1)">🎬 Video Logs</button>
+            <button class="nav-tab" onclick="switchTab('alogs',2)">🎙 Audio Logs</button>
+        </nav>
+
+        <div class="tab-section active" id="tab-letters">
+            <div id="letters-feed">
+                <div class="vlog-loading">
+                    <div class="spinner"></div>Loading letters…
+                </div>
+            </div>
+        </div>
+        <div class="tab-section" id="tab-vlogs">
+            <p class="vlog-section-title">🎬 Video Logs</p>
+            <div id="vlogs-feed">
+                <div class="vlog-loading">
+                    <div class="spinner"></div>Loading your logs
+                </div>
+            </div>
+        </div>
+        <div class="tab-section" id="tab-alogs">
+            <p class="vlog-section-title">🎙 Audio Logs</p>
+            <div id="alogs-feed">
+                <div class="vlog-loading">
+                    <div class="spinner"></div>Loading your logs
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HIDDEN MUSIC YT HOST -->
+    <div id="yt-music-host"
+        style="position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;bottom:0;left:0;overflow:hidden;z-index:-1">
+        <div id="yt-music-iframe"></div>
+    </div>
+
+    <!-- MUSIC PLAYER UI -->
+    <div id="music-player">
+        <div class="music-panel" id="music-panel">
+            <div class="music-panel-hdr">
+                <h3>🎵 Her Playlist</h3>
+                <button onclick="toggleMusic()" class="mp-close-btn">✕</button>
+            </div>
+            <div class="now-playing">
+                <p class="np-label">Now Playing</p>
+                <p class="np-title" id="np-title">Select a song ✨</p>
+                <p class="np-artist" id="np-artist"></p>
+            </div>
+            <div class="mp-controls">
+                <div class="mp-progress-wrap">
+                    <span class="mp-time" id="mp-current">0:00</span>
+                    <div class="mp-progress-track" id="mp-progress-track">
+                        <div class="mp-progress-fill" id="mp-progress-fill"></div>
+                        <div class="mp-progress-thumb" id="mp-progress-thumb"></div>
+                    </div>
+                    <span class="mp-time" id="mp-duration">0:00</span>
+                </div>
+                <div class="mp-btn-row">
+                    <button class="mp-btn mp-repeat" id="mp-repeat" onclick="toggleRepeat()" title="Repeat">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="17 1 21 5 17 9" />
+                            <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                            <polyline points="7 23 3 19 7 15" />
+                            <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                        </svg>
+                    </button>
+                    <button class="mp-btn mp-prev" onclick="prevTrack()" title="Previous">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
+                        </svg>
+                    </button>
+                    <button class="mp-btn mp-playpause" id="mp-playpause" onclick="togglePlayPause()">
+                        <svg id="mp-play-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg id="mp-pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </button>
+                    <button class="mp-btn mp-next" onclick="nextTrack()" title="Next">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6 18l8.5-6L6 6v12zm2.5-6 8.5 6V6z" />
+                        </svg>
+                    </button>
+                    <button class="mp-btn mp-vol" onclick="toggleMute()">
+                        <svg id="mp-vol-on" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                        </svg>
+                        <svg id="mp-vol-off" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+                            <path
+                                d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="playlist" id="playlist"></div>
+        </div>
+        <button class="music-pill" onclick="toggleMusic()">
+            <span class="note-icon">🎵</span>
+            <span id="pill-label">Her Playlist</span>
+        </button>
+    </div>
+
+    <button class="scroll-top-btn" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+    <canvas id="dl-canvas"></canvas>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

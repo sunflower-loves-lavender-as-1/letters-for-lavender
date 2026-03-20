@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio 💜</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Dancing+Script:wght@500;700&family=Playfair+Display:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --lav-50: #f9f7ff;
+            --lav-100: #f0ebff;
+            --lav-200: #ddd4f9;
+            --lav-300: #c4b4f4;
+            --lav-400: #a98de8;
+            --lav-500: #8b63d9;
+            --lav-600: #6e42bd;
+            --lav-700: #5530a0;
+            --lav-800: #3e2278;
+            --lav-900: #281550;
+            --cream: #fdf9f3;
+            --ok: #2e7d32;
+            --err: #b71c1c;
+            --warn: #e65100;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background: var(--lav-50);
+            min-height: 100vh;
+            color: #2d1e4e
+        }
+
+        /* LOCK */
+        #be-lock {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: linear-gradient(160deg, var(--lav-100), var(--cream) 60%, var(--lav-200));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 2rem;
+            transition: opacity .7s, transform .7s
+        }
+
+        #be-lock.out {
+            opacity: 0;
+            transform: translateY(-20px) scale(1.03);
+            pointer-events: none
+        }
+
+        .be-lock-icon {
+            font-size: 3rem;
+            animation: sway 4s ease-in-out infinite
+        }
+
+        @keyframes sway {
+
+            0%,
+            100% {
+                transform: rotate(-8deg)
+            }
+
+            50% {
+                transform: rotate(8deg)
+            }
+        }
+
+        .be-lock-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: var(--lav-700)
+        }
+
+        .be-lock-sub {
+            font-size: .9rem;
+            color: var(--lav-400);
+            font-style: italic
+        }
+
+        .be-pw-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 300px
+        }
+
+        .be-pw-inp {
+            width: 100%;
+            padding: .9rem 3rem .9rem 1.1rem;
+            border: 2px solid var(--lav-300);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-family: 'Lora', serif;
+            background: rgba(255, 255, 255, .9);
+            color: var(--lav-800);
+            outline: none;
+            transition: border-color .2s, box-shadow .2s
+        }
+
+        .be-pw-inp:focus {
+            border-color: var(--lav-500);
+            box-shadow: 0 0 0 4px rgba(139, 99, 217, .12)
+        }
+
+        .be-pw-inp.err {
+            border-color: #e57373;
+            animation: shake .4s ease
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-6px)
+            }
+
+            75% {
+                transform: translateX(6px)
+            }
+        }
+
+        .be-eye {
+            position: absolute;
+            right: .9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--lav-400)
+        }
+
+        .be-enter-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: .9rem;
+            background: var(--lav-600);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: .95rem;
+            font-family: 'Lora', serif;
+            cursor: pointer;
+            transition: background .2s, transform .1s;
+            box-shadow: 0 4px 16px rgba(110, 66, 189, .3)
+        }
+
+        .be-enter-btn:hover {
+            background: var(--lav-700)
+        }
+
+        .be-enter-btn:active {
+            transform: scale(.97)
+        }
+
+        .be-lock-err {
+            font-size: .82rem;
+            color: var(--err);
+            font-style: italic;
+            opacity: 0;
+            transition: opacity .2s
+        }
+
+        .be-lock-err.show {
+            opacity: 1
+        }
+
+        /* LAYOUT */
+        #be-app {
+            display: none;
+            min-height: 100vh
+        }
+
+        #be-app.visible {
+            display: flex;
+            flex-direction: column
+        }
+
+        .be-topbar {
+            background: linear-gradient(135deg, var(--lav-600), var(--lav-800));
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap
+        }
+
+        .be-topbar h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.6rem;
+            color: white
+        }
+
+        .be-topbar-right {
+            display: flex;
+            align-items: center;
+            gap: .7rem
+        }
+
+        .be-save-status {
+            font-size: .78rem;
+            color: rgba(255, 255, 255, .7);
+            font-style: italic;
+            min-width: 120px;
+            text-align: right
+        }
+
+        .be-settings-btn {
+            background: rgba(255, 255, 255, .15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, .25);
+            border-radius: 50px;
+            padding: .4rem .9rem;
+            font-size: .8rem;
+            cursor: pointer;
+            transition: background .2s
+        }
+
+        .be-settings-btn:hover {
+            background: rgba(255, 255, 255, .25)
+        }
+
+        .be-nav {
+            display: flex;
+            gap: 0;
+            background: white;
+            border-bottom: 2px solid var(--lav-200);
+            padding: 0 1.2rem;
+            overflow-x: auto
+        }
+
+        .be-nav-btn {
+            padding: .8rem 1.2rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: .88rem;
+            font-family: 'Lora', serif;
+            cursor: pointer;
+            color: var(--lav-500);
+            white-space: nowrap;
+            transition: color .15s, border-color .15s;
+            margin-bottom: -2px
+        }
+
+        .be-nav-btn.active {
+            color: var(--lav-700);
+            border-bottom-color: var(--lav-500);
+            font-weight: 500
+        }
+
+        .be-nav-btn:hover {
+            color: var(--lav-700)
+        }
+
+        .be-content {
+            flex: 1;
+            padding: 1.5rem;
+            max-width: 860px;
+            margin: 0 auto;
+            width: 100%
+        }
+
+        .be-section {
+            display: none
+        }
+
+        .be-section.active {
+            display: block
+        }
+
+        .be-section-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.7rem;
+            color: var(--lav-700);
+            margin-bottom: 1.2rem;
+            padding-bottom: .4rem;
+            border-bottom: 1.5px solid var(--lav-200)
+        }
+
+        /* CARDS */
+        .be-card {
+            background: white;
+            border-radius: 14px;
+            border: 1px solid var(--lav-200);
+            padding: 1.3rem 1.4rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 2px 12px rgba(139, 99, 217, .07)
+        }
+
+        .be-card-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--lav-700);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: .5rem
+        }
+
+        .be-card-title span {
+            font-size: 1.1rem
+        }
+
+        /* FORM ELEMENTS */
+        .be-field {
+            margin-bottom: 1rem
+        }
+
+        .be-label {
+            display: block;
+            font-size: .8rem;
+            color: var(--lav-500);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: .35rem
+        }
+
+        .be-input,
+        .be-select,
+        .be-textarea {
+            width: 100%;
+            padding: .7rem .9rem;
+            border: 1.5px solid var(--lav-200);
+            border-radius: 8px;
+            font-size: .92rem;
+            font-family: 'Lora', serif;
+            color: #2d1e4e;
+            background: white;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s
+        }
+
+        .be-input:focus,
+        .be-select:focus,
+        .be-textarea:focus {
+            border-color: var(--lav-400);
+            box-shadow: 0 0 0 3px rgba(139, 99, 217, .1)
+        }
+
+        .be-textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.7
+        }
+
+        .be-input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .8rem
+        }
+
+        @media(max-width:520px) {
+            .be-input-row {
+                grid-template-columns: 1fr
+            }
+        }
+
+        /* COLOR PICKER ROW */
+        .color-row {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            flex-wrap: wrap
+        }
+
+        .color-swatch-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: border-color .15s, transform .15s;
+            flex-shrink: 0
+        }
+
+        .color-swatch-btn:hover {
+            transform: scale(1.12)
+        }
+
+        .color-swatch-btn.selected {
+            border-color: var(--lav-700)
+        }
+
+        input[type=color].be-color-pick {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid var(--lav-200);
+            cursor: pointer;
+            padding: 2px;
+            background: none
+        }
+
+        /* FONT PICKER */
+        .font-row {
+            display: flex;
+            gap: .5rem;
+            flex-wrap: wrap
+        }
+
+        .font-btn {
+            padding: .35rem .8rem;
+            border: 1.5px solid var(--lav-200);
+            border-radius: 50px;
+            font-size: .85rem;
+            cursor: pointer;
+            background: white;
+            color: var(--lav-600);
+            transition: all .15s
+        }
+
+        .font-btn:hover {
+            border-color: var(--lav-400)
+        }
+
+        .font-btn.selected {
+            background: var(--lav-500);
+            color: white;
+            border-color: var(--lav-500)
+        }
+
+        /* DECORATIONS PICKER */
+        .deco-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem
+        }
+
+        .deco-btn {
+            font-size: 1.3rem;
+            padding: .25rem .4rem;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            background: var(--lav-50);
+            transition: all .15s;
+            line-height: 1
+        }
+
+        .deco-btn:hover {
+            background: var(--lav-100)
+        }
+
+        .deco-btn.selected {
+            border-color: var(--lav-500);
+            background: var(--lav-100)
+        }
+
+        /* PILL TAGS (for flower arrays) */
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem;
+            margin-top: .4rem
+        }
+
+        .pill {
+            display: flex;
+            align-items: center;
+            gap: .3rem;
+            background: var(--lav-100);
+            border: 1px solid var(--lav-200);
+            border-radius: 50px;
+            padding: .2rem .6rem .2rem .7rem;
+            font-size: .85rem;
+            color: var(--lav-700)
+        }
+
+        .pill-remove {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--lav-400);
+            font-size: .9rem;
+            padding: 0;
+            line-height: 1;
+            transition: color .15s
+        }
+
+        .pill-remove:hover {
+            color: var(--err)
+        }
+
+        .pill-add-wrap {
+            display: flex;
+            gap: .4rem;
+            margin-top: .5rem
+        }
+
+        .pill-add-inp {
+            flex: 1;
+            padding: .4rem .7rem;
+            border: 1.5px solid var(--lav-200);
+            border-radius: 8px;
+            font-size: .9rem;
+            font-family: 'Lora', serif;
+            outline: none
+        }
+
+        .pill-add-inp:focus {
+            border-color: var(--lav-400)
+        }
+
+        .pill-add-btn {
+            padding: .4rem .9rem;
+            background: var(--lav-500);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: .85rem;
+            cursor: pointer;
+            transition: background .15s
+        }
+
+        .pill-add-btn:hover {
+            background: var(--lav-600)
+        }
+
+        /* TEMPLATE PICKER */
+        .tmpl-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: .8rem;
+            margin-bottom: 1rem
+        }
+
+        .tmpl-card {
+            border: 2px solid var(--lav-200);
+            border-radius: 10px;
+            padding: .9rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all .2s;
+            background: white
+        }
+
+        .tmpl-card:hover {
+            border-color: var(--lav-400);
+            box-shadow: 0 3px 12px rgba(139, 99, 217, .12)
+        }
+
+        .tmpl-card.selected {
+            border-color: var(--lav-500);
+            background: var(--lav-50);
+            box-shadow: 0 0 0 3px rgba(139, 99, 217, .15)
+        }
+
+        .tmpl-card .tmpl-icon {
+            font-size: 1.8rem;
+            margin-bottom: .4rem
+        }
+
+        .tmpl-card .tmpl-name {
+            font-size: .82rem;
+            color: var(--lav-700);
+            font-weight: 500
+        }
+
+        .tmpl-card .tmpl-desc {
+            font-size: .72rem;
+            color: var(--lav-400);
+            margin-top: .2rem;
+            font-style: italic
+        }
+
+        /* PARAGRAPHS EDITOR */
+        .para-list {
+            display: flex;
+            flex-direction: column;
+            gap: .6rem;
+            margin-bottom: .8rem
+        }
+
+        .para-item {
+            display: flex;
+            gap: .5rem;
+            align-items: flex-start
+        }
+
+        .para-item .be-textarea {
+            min-height: 70px;
+            flex: 1
+        }
+
+        .para-del {
+            background: none;
+            border: 1.5px solid #fca5a5;
+            color: #ef4444;
+            border-radius: 8px;
+            padding: .4rem .6rem;
+            cursor: pointer;
+            font-size: .8rem;
+            transition: all .15s;
+            flex-shrink: 0;
+            margin-top: 2px
+        }
+
+        .para-del:hover {
+            background: #fef2f2
+        }
+
+        .be-add-para-btn {
+            width: 100%;
+            padding: .6rem;
+            border: 1.5px dashed var(--lav-300);
+            border-radius: 8px;
+            background: none;
+            color: var(--lav-400);
+            font-family: 'Lora', serif;
+            font-size: .88rem;
+            cursor: pointer;
+            transition: all .15s
+        }
+
+        .be-add-para-btn:hover {
+            border-color: var(--lav-500);
+            color: var(--lav-500);
+            background: var(--lav-50)
+        }
+
+        /* LETTERS LIST */
+        .letters-list {
+            display: flex;
+            flex-direction: column;
+            gap: .8rem;
+            margin-bottom: 1.2rem
+        }
+
+        .letter-list-item {
+            display: flex;
+            align-items: center;
+            gap: .9rem;
+            background: white;
+            border: 1px solid var(--lav-200);
+            border-radius: 10px;
+            padding: .8rem 1rem;
+            cursor: pointer;
+            transition: all .15s
+        }
+
+        .letter-list-item:hover {
+            border-color: var(--lav-400);
+            box-shadow: 0 2px 10px rgba(139, 99, 217, .1)
+        }
+
+        .letter-list-item.active-edit {
+            border-color: var(--lav-500);
+            background: var(--lav-50)
+        }
+
+        .lli-num {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            color: var(--lav-400);
+            min-width: 28px
+        }
+
+        .lli-info {
+            flex: 1
+        }
+
+        .lli-title {
+            font-size: .92rem;
+            color: var(--lav-700);
+            font-weight: 500
+        }
+
+        .lli-sub {
+            font-size: .75rem;
+            color: var(--lav-400);
+            font-style: italic
+        }
+
+        .lli-del {
+            background: none;
+            border: none;
+            color: var(--lav-300);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: .2rem;
+            transition: color .15s
+        }
+
+        .lli-del:hover {
+            color: #ef4444
+        }
+
+        /* LOG ITEMS LIST */
+        .log-list {
+            display: flex;
+            flex-direction: column;
+            gap: .6rem;
+            margin-bottom: 1rem
+        }
+
+        .log-list-item {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            background: white;
+            border: 1px solid var(--lav-200);
+            border-radius: 8px;
+            padding: .7rem .9rem
+        }
+
+        .log-list-item .lli-info {
+            flex: 1
+        }
+
+        .log-date-lbl {
+            font-size: .9rem;
+            color: var(--lav-700)
+        }
+
+        .log-time-lbl {
+            font-size: .72rem;
+            color: var(--lav-400)
+        }
+
+        .log-url-lbl {
+            font-size: .72rem;
+            color: var(--lav-300);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 180px
+        }
+
+        .log-del {
+            background: none;
+            border: none;
+            color: var(--lav-300);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color .15s
+        }
+
+        .log-del:hover {
+            color: #ef4444
+        }
+
+        /* SONG LIST */
+        .song-list {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            margin-bottom: 1rem
+        }
+
+        .song-item {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            background: white;
+            border: 1px solid var(--lav-200);
+            border-radius: 8px;
+            padding: .65rem .9rem
+        }
+
+        .song-drag {
+            color: var(--lav-300);
+            cursor: grab;
+            font-size: 1rem;
+            padding: .2rem
+        }
+
+        .song-info {
+            flex: 1
+        }
+
+        .song-title {
+            font-size: .9rem;
+            color: var(--lav-700)
+        }
+
+        .song-id {
+            font-size: .72rem;
+            color: var(--lav-400)
+        }
+
+        .song-del {
+            background: none;
+            border: none;
+            color: var(--lav-300);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color .15s
+        }
+
+        .song-del:hover {
+            color: #ef4444
+        }
+
+        /* BUTTONS */
+        .be-btn {
+            padding: .65rem 1.3rem;
+            border-radius: 50px;
+            font-size: .88rem;
+            font-family: 'Lora', serif;
+            cursor: pointer;
+            transition: all .18s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem
+        }
+
+        .be-btn-primary {
+            background: var(--lav-500);
+            color: white;
+            box-shadow: 0 2px 10px rgba(139, 99, 217, .25)
+        }
+
+        .be-btn-primary:hover {
+            background: var(--lav-600)
+        }
+
+        .be-btn-secondary {
+            background: white;
+            color: var(--lav-600);
+            border: 1.5px solid var(--lav-300)
+        }
+
+        .be-btn-secondary:hover {
+            background: var(--lav-50);
+            border-color: var(--lav-400)
+        }
+
+        .be-btn-danger {
+            background: white;
+            color: #ef4444;
+            border: 1.5px solid #fca5a5
+        }
+
+        .be-btn-danger:hover {
+            background: #fef2f2
+        }
+
+        .be-btn:active {
+            transform: scale(.97)
+        }
+
+        .be-btn:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            transform: none
+        }
+
+        /* TOAST */
+        .be-toast {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #2d1e4e;
+            color: white;
+            padding: .7rem 1.4rem;
+            border-radius: 50px;
+            font-size: .85rem;
+            font-family: 'Lora', serif;
+            z-index: 9999;
+            transition: transform .3s ease, opacity .3s;
+            opacity: 0;
+            white-space: nowrap
+        }
+
+        .be-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1
+        }
+
+        .be-toast.ok {
+            background: var(--ok)
+        }
+
+        .be-toast.err {
+            background: var(--err)
+        }
+
+        /* SETTINGS MODAL */
+        .be-modal-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(40, 21, 80, .4);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s
+        }
+
+        .be-modal-bg.show {
+            opacity: 1;
+            pointer-events: all
+        }
+
+        .be-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 12px 40px rgba(40, 21, 80, .2)
+        }
+
+        .be-modal h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: var(--lav-700);
+            margin-bottom: 1.2rem
+        }
+
+        .be-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: .6rem;
+            margin-top: 1.2rem
+        }
+
+        .be-hint {
+            font-size: .75rem;
+            color: var(--lav-400);
+            margin-top: .3rem;
+            font-style: italic;
+            line-height: 1.5
+        }
+
+        /* DIVIDER */
+        .be-divider {
+            border: none;
+            border-top: 1px solid var(--lav-100);
+            margin: 1.2rem 0
+        }
+
+        /* Action row */
+        .be-action-row {
+            display: flex;
+            gap: .6rem;
+            flex-wrap: wrap;
+            margin-top: 1rem
+        }
+
+        /* Envelope preview */
+        .env-preview {
+            background: var(--lav-200);
+            border-radius: 8px;
+            padding: .9rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            border: 1.5px solid var(--lav-300);
+            margin-bottom: 1rem
+        }
+
+        .env-preview .pv-icon {
+            font-size: 1.6rem
+        }
+
+        .env-preview .pv-text h4 {
+            font-size: .95rem;
+            color: var(--lav-800)
+        }
+
+        .env-preview .pv-text p {
+            font-size: .78rem;
+            color: var(--lav-600);
+            font-style: italic
+        }
+
+        .be-new-letter-btn {
+            width: 100%;
+            padding: .8rem;
+            border: 2px dashed var(--lav-300);
+            border-radius: 10px;
+            background: none;
+            color: var(--lav-500);
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all .2s
+        }
+
+        .be-new-letter-btn:hover {
+            border-color: var(--lav-500);
+            background: var(--lav-50)
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOCK SCREEN -->
+    <div id="be-lock">
+        <div class="be-lock-icon">🔐</div>
+        <h1 class="be-lock-title">Studio Access</h1>
+        <p class="be-lock-sub">Your private workspace</p>
+        <div class="be-pw-wrap">
+            <input type="password" class="be-pw-inp" id="be-pw" placeholder="Admin password…" autocomplete="off"
+                onkeydown="if(event.key==='Enter')beUnlock()">
+            <button class="be-eye" onclick="beToggleEye()">👁</button>
+        </div>
+        <button class="be-enter-btn" onclick="beUnlock()">Enter Studio 💜</button>
+        <p class="be-lock-err" id="be-lock-err">Wrong password. Try again.</p>
+    </div>
+
+    <!-- APP -->
+    <div id="be-app">
+        <div class="be-topbar">
+            <h1>💜 Studio</h1>
+            <div class="be-topbar-right">
+                <span class="be-save-status" id="be-save-status"></span>
+                <button class="be-settings-btn" onclick="openSettings()">⚙ Settings</button>
+            </div>
+        </div>
+
+        <nav class="be-nav">
+            <button class="be-nav-btn active" onclick="beTab('letters',0)">💌 Letters</button>
+            <button class="be-nav-btn" onclick="beTab('vlogs',1)">🎬 Video Logs</button>
+            <button class="be-nav-btn" onclick="beTab('alogs',2)">🎙 Audio Logs</button>
+            <button class="be-nav-btn" onclick="beTab('playlist',3)">🎵 Playlist</button>
+        </nav>
+
+        <div class="be-content">
+
+            <!-- ══ LETTERS ══ -->
+            <div class="be-section active" id="be-sec-letters">
+                <p class="be-section-title">💌 Letters</p>
+
+                <div class="letters-list" id="be-letters-list"></div>
+                <button class="be-new-letter-btn" onclick="beNewLetter()">+ New Letter</button>
+
+                <div id="be-letter-editor" style="display:none;margin-top:1.5rem">
+                    <hr class="be-divider">
+                    <p class="be-section-title" style="font-size:1.3rem" id="be-letter-editor-title">Edit Letter</p>
+
+                    <!-- Template picker -->
+                    <div class="be-card">
+                        <p class="be-card-title"><span>🎨</span> Template Style</p>
+                        <div class="tmpl-grid" id="be-tmpl-grid">
+                            <div class="tmpl-card selected" data-tmpl="classic" onclick="bePick(this,'tmpl')">
+                                <div class="tmpl-icon">💌</div>
+                                <div class="tmpl-name">Classic</div>
+                                <div class="tmpl-desc">Lavender, elegant</div>
+                            </div>
+                            <div class="tmpl-card" data-tmpl="torn" onclick="bePick(this,'tmpl')">
+                                <div class="tmpl-icon">📜</div>
+                                <div class="tmpl-name">Torn Paper</div>
+                                <div class="tmpl-desc">Coming soon</div>
+                            </div>
+                            <div class="tmpl-card" data-tmpl="flipbook" onclick="bePick(this,'tmpl')">
+                                <div class="tmpl-icon">📖</div>
+                                <div class="tmpl-name">Flip Pages</div>
+                                <div class="tmpl-desc">Coming soon</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Envelope -->
+                    <div class="be-card">
+                        <p class="be-card-title"><span>✉️</span> Envelope</p>
+                        <div class="env-preview" id="be-env-preview">
+                            <div class="pv-icon" id="pv-icon">🌸</div>
+                            <div class="pv-text">
+                                <h4 id="pv-title">A Sweet Hello</h4>
+                                <p id="pv-sub">Just thinking of you today…</p>
+                            </div>
+                        </div>
+                        <div class="be-input-row">
+                            <div class="be-field">
+                                <label class="be-label">Icon (emoji)</label>
+                                <input class="be-input" id="env-icon" value="🌸" oninput="bePreviewEnv()">
+                            </div>
+                            <div class="be-field">
+                                <label class="be-label">Title</label>
+                                <input class="be-input" id="env-title" value="A Sweet Hello" oninput="bePreviewEnv()">
+                            </div>
+                        </div>
+                        <div class="be-field">
+                            <label class="be-label">Subtitle</label>
+                            <input class="be-input" id="env-sub" value="Just thinking of you today…"
+                                oninput="bePreviewEnv()">
+                        </div>
+                        <div class="be-field">
+                            <label class="be-label">Envelope Color</label>
+                            <div class="color-row" id="env-color-row">
+                                <button class="color-swatch-btn selected" style="background:#ddd4f9"
+                                    data-color="#ddd4f9" onclick="bePickColor(this,'env')"></button>
+                                <button class="color-swatch-btn" style="background:#fce4ec" data-color="#fce4ec"
+                                    onclick="bePickColor(this,'env')"></button>
+                                <button class="color-swatch-btn" style="background:#e8f5e9" data-color="#e8f5e9"
+                                    onclick="bePickColor(this,'env')"></button>
+                                <button class="color-swatch-btn" style="background:#fff3e0" data-color="#fff3e0"
+                                    onclick="bePickColor(this,'env')"></button>
+                                <button class="color-swatch-btn" style="background:#e3f2fd" data-color="#e3f2fd"
+                                    onclick="bePickColor(this,'env')"></button>
+                                <button class="color-swatch-btn" style="background:#f3e5f5" data-color="#f3e5f5"
+                                    onclick="bePickColor(this,'env')"></button>
+                                <input type="color" class="be-color-pick" id="env-color-custom" value="#ddd4f9"
+                                    title="Custom color" oninput="beCustomColor(this,'env')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Style -->
+                    <div class="be-card">
+                        <p class="be-card-title"><span>✨</span> Letter Style</p>
+                        <div class="be-field">
+                            <label class="be-label">Title Font</label>
+                            <div class="font-row" id="font-row">
+                                <button class="font-btn selected" style="font-family:'Dancing Script',cursive"
+                                    data-font="Dancing Script" onclick="beFontPick(this)">Dancing Script</button>
+                                <button class="font-btn" style="font-family:'Satisfy',cursive" data-font="Satisfy"
+                                    onclick="beFontPick(this)">Satisfy</button>
+                                <button class="font-btn" style="font-family:'Great Vibes',cursive"
+                                    data-font="Great Vibes" onclick="beFontPick(this)">Great Vibes</button>
+                                <button class="font-btn" style="font-family:'Pacifico',cursive" data-font="Pacifico"
+                                    onclick="beFontPick(this)">Pacifico</button>
+                                <button class="font-btn" style="font-family:'Playfair Display',serif"
+                                    data-font="Playfair Display" onclick="beFontPick(this)">Playfair Display</button>
+                                <button class="font-btn" style="font-family:'Lora',serif" data-font="Lora"
+                                    onclick="beFontPick(this)">Lora</button>
+                            </div>
+                        </div>
+                        <div class="be-input-row">
+                            <div class="be-field">
+                                <label class="be-label">Accent / Heading Color</label>
+                                <div class="color-row" id="accent-color-row">
+                                    <button class="color-swatch-btn selected" style="background:#6e42bd"
+                                        data-color="#6e42bd" onclick="bePickColor(this,'accent')"></button>
+                                    <button class="color-swatch-btn" style="background:#c2185b" data-color="#c2185b"
+                                        onclick="bePickColor(this,'accent')"></button>
+                                    <button class="color-swatch-btn" style="background:#00695c" data-color="#00695c"
+                                        onclick="bePickColor(this,'accent')"></button>
+                                    <button class="color-swatch-btn" style="background:#1565c0" data-color="#1565c0"
+                                        onclick="bePickColor(this,'accent')"></button>
+                                    <button class="color-swatch-btn" style="background:#4a148c" data-color="#4a148c"
+                                        onclick="bePickColor(this,'accent')"></button>
+                                    <input type="color" class="be-color-pick" id="accent-color-custom" value="#6e42bd"
+                                        oninput="beCustomColor(this,'accent')">
+                                </div>
+                            </div>
+                            <div class="be-field">
+                                <label class="be-label">Body Text Color</label>
+                                <div class="color-row" id="body-color-row">
+                                    <button class="color-swatch-btn selected" style="background:#3d2d5e"
+                                        data-color="#3d2d5e" onclick="bePickColor(this,'body')"></button>
+                                    <button class="color-swatch-btn" style="background:#212121" data-color="#212121"
+                                        onclick="bePickColor(this,'body')"></button>
+                                    <button class="color-swatch-btn" style="background:#1b5e20" data-color="#1b5e20"
+                                        onclick="bePickColor(this,'body')"></button>
+                                    <button class="color-swatch-btn" style="background:#0d47a1" data-color="#0d47a1"
+                                        onclick="bePickColor(this,'body')"></button>
+                                    <input type="color" class="be-color-pick" id="body-color-custom" value="#3d2d5e"
+                                        oninput="beCustomColor(this,'body')">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="be-card">
+                        <p class="be-card-title"><span>📝</span> Letter Content</p>
+                        <div class="be-input-row">
+                            <div class="be-field">
+                                <label class="be-label">Letter Title</label>
+                                <input class="be-input" id="letter-title" value="A Sweet Hello 🌷">
+                            </div>
+                            <div class="be-field">
+                                <label class="be-label">Salutation</label>
+                                <input class="be-input" id="letter-salutation" value="Hey, you 🌷">
+                            </div>
+                        </div>
+                        <div class="be-field">
+                            <label class="be-label">Paragraphs <span style="font-size:.72rem;color:var(--lav-300)">— use
+                                    *text* for italic</span></label>
+                            <div class="para-list" id="para-list"></div>
+                            <button class="be-add-para-btn" onclick="beAddPara()">+ Add paragraph</button>
+                        </div>
+                        <div class="be-input-row">
+                            <div class="be-field">
+                                <label class="be-label">Sign-off</label>
+                                <input class="be-input" id="letter-signoff" value="With a gentle heart,">
+                            </div>
+                            <div class="be-field">
+                                <label class="be-label">Signature Name</label>
+                                <input class="be-input" id="letter-name" value="— Your Admirer 💜">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Decorations -->
+                    <div class="be-card">
+                        <p class="be-card-title"><span>🌸</span> Decorations</p>
+                        <div class="be-field">
+                            <label class="be-label">Top Flower Row</label>
+                            <div class="pill-row" id="deco-top-pills"></div>
+                            <div class="pill-add-wrap">
+                                <input class="pill-add-inp" id="deco-top-inp" placeholder="Add emoji…" maxlength="4">
+                                <button class="pill-add-btn" onclick="beAddPill('top')">Add</button>
+                            </div>
+                        </div>
+                        <div class="be-field">
+                            <label class="be-label">Bottom Flower Row</label>
+                            <div class="pill-row" id="deco-bot-pills"></div>
+                            <div class="pill-add-wrap">
+                                <input class="pill-add-inp" id="deco-bot-inp" placeholder="Add emoji…" maxlength="4">
+                                <button class="pill-add-btn" onclick="beAddPill('bot')">Add</button>
+                            </div>
+                        </div>
+                        <div class="be-input-row">
+                            <div class="be-field">
+                                <label class="be-label">Divider Flower</label>
+                                <input class="be-input" id="deco-divider" value="🪻" maxlength="4">
+                            </div>
+                            <div class="be-field">
+                                <label class="be-label">Corner Flowers (4)</label>
+                                <div class="pill-row" id="deco-corner-pills"></div>
+                                <div class="pill-add-wrap">
+                                    <input class="pill-add-inp" id="deco-corner-inp" placeholder="Emoji…" maxlength="4">
+                                    <button class="pill-add-btn" onclick="beAddPill('corner')">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="be-action-row">
+                        <button class="be-btn be-btn-primary" onclick="beSaveLetter()">💾 Save Letter</button>
+                        <button class="be-btn be-btn-secondary" onclick="beCancelEdit()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ VLOGS ══ -->
+            <div class="be-section" id="be-sec-vlogs">
+                <p class="be-section-title">🎬 Video Logs</p>
+                <div class="log-list" id="be-vlogs-list"></div>
+                <div class="be-card">
+                    <p class="be-card-title"><span>➕</span> Add Video Log</p>
+                    <div class="be-input-row">
+                        <div class="be-field">
+                            <label class="be-label">Date (e.g. Fri, 20 March 2026)</label>
+                            <input class="be-input" id="vlog-date" placeholder="Fri, 20 March 2026">
+                        </div>
+                        <div class="be-field">
+                            <label class="be-label">Time (e.g. 12:05 PM)</label>
+                            <input class="be-input" id="vlog-time" placeholder="12:05 PM">
+                        </div>
+                    </div>
+                    <div class="be-field">
+                        <label class="be-label">YouTube URL</label>
+                        <input class="be-input" id="vlog-url" placeholder="https://youtu.be/XXXXXXXXX">
+                    </div>
+                    <div class="be-action-row">
+                        <button class="be-btn be-btn-primary" onclick="beAddLog('vlog')">Add Video Log</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ ALOGS ══ -->
+            <div class="be-section" id="be-sec-alogs">
+                <p class="be-section-title">🎙 Audio Logs</p>
+                <div class="log-list" id="be-alogs-list"></div>
+                <div class="be-card">
+                    <p class="be-card-title"><span>➕</span> Add Audio Log</p>
+                    <div class="be-input-row">
+                        <div class="be-field">
+                            <label class="be-label">Date</label>
+                            <input class="be-input" id="alog-date" placeholder="Fri, 20 March 2026">
+                        </div>
+                        <div class="be-field">
+                            <label class="be-label">Time</label>
+                            <input class="be-input" id="alog-time" placeholder="09:30 AM">
+                        </div>
+                    </div>
+                    <div class="be-field">
+                        <label class="be-label">YouTube URL (upload audio as YouTube video)</label>
+                        <input class="be-input" id="alog-url" placeholder="https://youtu.be/XXXXXXXXX">
+                    </div>
+                    <div class="be-action-row">
+                        <button class="be-btn be-btn-primary" onclick="beAddLog('alog')">Add Audio Log</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ PLAYLIST ══ -->
+            <div class="be-section" id="be-sec-playlist">
+                <p class="be-section-title">🎵 Her Playlist</p>
+                <div class="song-list" id="be-song-list"></div>
+                <div class="be-card">
+                    <p class="be-card-title"><span>➕</span> Add Song</p>
+                    <div class="be-input-row">
+                        <div class="be-field">
+                            <label class="be-label">Song Title</label>
+                            <input class="be-input" id="song-title" placeholder="Song name…">
+                        </div>
+                        <div class="be-field">
+                            <label class="be-label">YouTube URL or Video ID</label>
+                            <input class="be-input" id="song-url" placeholder="https://youtu.be/... or video ID">
+                        </div>
+                    </div>
+                    <div class="be-action-row">
+                        <button class="be-btn be-btn-primary" onclick="beAddSong()">Add Song</button>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /be-content -->
+    </div><!-- /be-app -->
+
+    <!-- SETTINGS MODAL -->
+    <div class="be-modal-bg" id="be-modal-bg" onclick="if(event.target===this)closeSettings()">
+        <div class="be-modal">
+            <h2>⚙ GitHub Settings</h2>
+            <div class="be-field">
+                <label class="be-label">GitHub Username</label>
+                <input class="be-input" id="gh-user" placeholder="your-username">
+            </div>
+            <div class="be-field">
+                <label class="be-label">Repository Name</label>
+                <input class="be-input" id="gh-repo" placeholder="your-repo-name">
+            </div>
+            <div class="be-field">
+                <label class="be-label">Branch</label>
+                <input class="be-input" id="gh-branch" placeholder="main" value="main">
+            </div>
+            <div class="be-field">
+                <label class="be-label">Personal Access Token</label>
+                <input class="be-input" id="gh-token" type="password" placeholder="ghp_…">
+                <p class="be-hint">Stored only in your browser's localStorage. Never in any file. Generate at github.com
+                    → Settings → Developer settings → Personal access tokens → Fine-grained → repo contents: read &
+                    write.</p>
+            </div>
+            <div class="be-modal-footer">
+                <button class="be-btn be-btn-secondary" onclick="closeSettings()">Cancel</button>
+                <button class="be-btn be-btn-primary" onclick="saveSettings()">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="be-toast" id="be-toast"></div>
+
+    <script>
+        /* ═══════════════════════════════════════
+           ADMIN PASSWORD  (change hash for yours)
+           Default admin pass: Studio-Admin-2026
+           Generate a new hash at: sha256.online
+        ═══════════════════════════════════════ */
+        const ADMIN_HASH = "2966058f7ed4a740c6ecd9f49878633c46f0c57f632ba19383c280acab2597a7";
+        // ↑ REPLACE THIS with sha256 of your actual admin password
+        // Easy way: open browser console on any page, run:
+        // crypto.subtle.digest('SHA-256',new TextEncoder().encode('YourPassword')).then(b=>console.log(Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')))
+
+        async function sha256(msg) {
+            const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(msg));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+        }
+
+        async function beUnlock() {
+            const val = document.getElementById("be-pw").value;
+            const h = await sha256(val);
+            // Check against the ADMIN_HASH constant
+            const ok = h === ADMIN_HASH;
+            if (ok) {
+                document.getElementById("be-lock").classList.add("out");
+                setTimeout(() => { document.getElementById("be-lock").style.display = "none"; document.getElementById("be-app").classList.add("visible"); beInit(); }, 700);
+            } else {
+                const inp = document.getElementById("be-pw");
+                inp.classList.add("err");
+                document.getElementById("be-lock-err").classList.add("show");
+                setTimeout(() => { inp.classList.remove("err"); document.getElementById("be-lock-err").classList.remove("show"); }, 2000);
+            }
+        }
+        function beToggleEye() { const i = document.getElementById("be-pw"); i.type = i.type === "password" ? "text" : "password"; }
+        document.getElementById("be-pw").addEventListener("keydown", e => { if (e.key === "Enter") beUnlock(); });
+
+        /* ═══════════════════════════════════════
+           STATE
+        ═══════════════════════════════════════ */
+        let beData = {
+            letters: [],
+            vlogs: { vlogs: [], alogs: [] },
+            playlist: { songs: [] }
+        };
+        let beEditingLetter = null; // letter object being edited
+
+        /* ═══════════════════════════════════════
+           INIT
+        ═══════════════════════════════════════ */
+        async function beInit() {
+            loadSettingsUI();
+            await beLoadAll();
+        }
+
+        async function beLoadAll() {
+            setSaveStatus("Loading…");
+            try {
+                const [lr, vr, pr] = await Promise.all([
+                    fetch("data/letters.json?_=" + Date.now()),
+                    fetch("data/vlogs.json?_=" + Date.now()),
+                    fetch("data/playlist.json?_=" + Date.now())
+                ]);
+                beData.letters = (await lr.json()).letters || [];
+                beData.vlogs = await vr.json();
+                beData.playlist = await pr.json();
+                setSaveStatus("Loaded ✓");
+            } catch (e) {
+                setSaveStatus("Could not load data");
+            }
+            beRenderAll();
+        }
+
+        function beRenderAll() {
+            renderLettersList();
+            renderVlogsList();
+            renderAlogsList();
+            renderSongList();
+        }
+
+        /* ═══════════════════════════════════════
+           TABS
+        ═══════════════════════════════════════ */
+        function beTab(name, idx) {
+            document.querySelectorAll(".be-section").forEach(s => s.classList.remove("active"));
+            document.querySelectorAll(".be-nav-btn").forEach(b => b.classList.remove("active"));
+            document.getElementById("be-sec-" + name).classList.add("active");
+            document.querySelectorAll(".be-nav-btn")[idx].classList.add("active");
+        }
+
+        /* ═══════════════════════════════════════
+           LETTERS LIST
+        ═══════════════════════════════════════ */
+        function renderLettersList() {
+            const el = document.getElementById("be-letters-list"); el.innerHTML = "";
+            beData.letters.forEach((l, i) => {
+                const d = document.createElement("div"); d.className = "letter-list-item" + (beEditingLetter?.id === l.id ? " active-edit" : "");
+                d.innerHTML = `<span class="lli-num">No.${l.number || i + 1}</span><div class="lli-info"><div class="lli-title">${l.envelope?.title || l.content?.title || "Letter"}</div><div class="lli-sub">Template: ${l.template || "classic"}</div></div><button class="lli-del" onclick="beDeleteLetter('${l.id}',event)" title="Delete">🗑</button>`;
+                d.querySelector(".lli-info").addEventListener("click", () => beEditLetter(l));
+                el.appendChild(d);
+            });
+        }
+
+        function beNewLetter() {
+            const id = "letter-" + (Date.now());
+            const newL = { id, number: beData.letters.length + 1, template: "classic", envelope: { color: "#ddd4f9", borderColor: "#c4b4f4", icon: "🌸", title: "New Letter", subtitle: "" }, style: { headerGradientFrom: "#f0ebff", headerGradientTo: "#ddd4f9", accentColor: "#6e42bd", titleColor: "#5530a0", bodyColor: "#3d2d5e", font: "Dancing Script", tearColor: "#c4b4f4" }, content: { date: "auto", title: "", salutation: "", paragraphs: [""], signOff: "With love,", name: "— Your Admirer 💜", decorations: { topFlowers: ["🪻", "💜", "🌸"], bottomFlowers: ["🌷", "🪻", "🌷"], dividerFlower: "🪻", cornerFlowers: ["🌸", "🪻", "✨", "💜"] } } };
+            beData.letters.push(newL);
+            beEditLetter(newL);
+            renderLettersList();
+        }
+
+        function beEditLetter(letter) {
+            beEditingLetter = letter;
+            document.getElementById("be-letter-editor").style.display = "block";
+            document.getElementById("be-letter-editor-title").textContent = `Edit: ${letter.envelope?.title || "Letter"}`;
+            // Fill form
+            const e = letter.envelope || {}; const s = letter.style || {}; const c = letter.content || {}; const dec = c.decorations || {};
+            _v("env-icon", e.icon || "🌸"); _v("env-title", e.title || ""); _v("env-sub", e.subtitle || "");
+            _v("letter-title", c.title || ""); _v("letter-salutation", c.salutation || "");
+            _v("letter-signoff", c.signOff || ""); _v("letter-name", c.name || "");
+            _v("deco-divider", dec.dividerFlower || "🪻");
+            // Paragraphs
+            const pl = document.getElementById("para-list"); pl.innerHTML = "";
+            (c.paragraphs || [""]).forEach(p => _addParaEl(p));
+            // Pills
+            _renderPills("deco-top-pills", dec.topFlowers || [], 'top');
+            _renderPills("deco-bot-pills", dec.bottomFlowers || [], 'bot');
+            _renderPills("deco-corner-pills", dec.cornerFlowers || [], 'corner');
+            // Color swatches
+            _selectSwatch("env-color-row", e.color || "#ddd4f9");
+            _selectSwatch("accent-color-row", s.accentColor || "#6e42bd");
+            _selectSwatch("body-color-row", s.bodyColor || "#3d2d5e");
+            // Font
+            document.querySelectorAll(".font-btn").forEach(b => { b.classList.toggle("selected", b.dataset.font === (s.font || "Dancing Script")); });
+            // Template
+            document.querySelectorAll(".tmpl-card").forEach(b => { b.classList.toggle("selected", b.dataset.tmpl === (letter.template || "classic")); });
+            bePreviewEnv();
+            document.getElementById("be-letter-editor").scrollIntoView({ behavior: "smooth", block: "start" });
+            renderLettersList();
+        }
+
+        function beCancelEdit() { beEditingLetter = null; document.getElementById("be-letter-editor").style.display = "none"; renderLettersList(); }
+
+        function beDeleteLetter(id, e) {
+            e.stopPropagation();
+            if (!confirm("Delete this letter? This cannot be undone.")) return;
+            beData.letters = beData.letters.filter(l => l.id !== id);
+            if (beEditingLetter?.id === id) beCancelEdit();
+            renderLettersList();
+            bePushFile("data/letters.json", { letters: beData.letters }, "Delete letter");
+        }
+
+        /* ─── helpers ─── */
+        function _v(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
+        function _gv(id) { return (document.getElementById(id)?.value || "").trim(); }
+
+        function _addParaEl(text = "") {
+            const wrap = document.createElement("div"); wrap.className = "para-item";
+            const ta = document.createElement("textarea"); ta.className = "be-textarea"; ta.value = text; ta.style.minHeight = "70px";
+            const del = document.createElement("button"); del.className = "para-del"; del.textContent = "✕";
+            del.onclick = () => wrap.remove();
+            wrap.appendChild(ta); wrap.appendChild(del);
+            document.getElementById("para-list").appendChild(wrap);
+        }
+        function beAddPara() { _addParaEl(""); }
+
+        function _renderPills(containerId, arr, group) {
+            const c = document.getElementById(containerId); c.innerHTML = "";
+            arr.forEach(emoji => {
+                const pill = document.createElement("div"); pill.className = "pill";
+                pill.innerHTML = `${emoji}<button class="pill-remove" onclick="this.parentElement.remove()">✕</button>`;
+                c.appendChild(pill);
+            });
+        }
+        function beAddPill(group) {
+            const inp = document.getElementById(`deco-${group}-inp`);
+            const val = inp.value.trim(); if (!val) return;
+            const c = document.getElementById(`deco-${group === "bot" ? "bot" : group}-pills`);
+            const pill = document.createElement("div"); pill.className = "pill";
+            pill.innerHTML = `${val}<button class="pill-remove" onclick="this.parentElement.remove()">✕</button>`;
+            c.appendChild(pill);
+            inp.value = "";
+        }
+
+        function _getPills(containerId) {
+            return [...document.querySelectorAll(`#${containerId} .pill`)].map(p => p.textContent.replace("✕", "").trim());
+        }
+
+        function bePick(el, group) {
+            el.closest(`#be-tmpl-grid,.font-row`).querySelectorAll(".tmpl-card,.font-btn").forEach(b => b.classList.remove("selected"));
+            el.classList.add("selected");
+        }
+        function beFontPick(el) {
+            document.querySelectorAll(".font-btn").forEach(b => b.classList.remove("selected"));
+            el.classList.add("selected");
+        }
+
+        function bePickColor(btn, group) {
+            const row = btn.closest(".color-row");
+            row.querySelectorAll(".color-swatch-btn").forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
+            _applyColorPreview(group, btn.dataset.color);
+        }
+        function beCustomColor(inp, group) {
+            const row = inp.closest(".color-row");
+            row.querySelectorAll(".color-swatch-btn").forEach(b => b.classList.remove("selected"));
+            _applyColorPreview(group, inp.value);
+        }
+        function _applyColorPreview(group, color) {
+            if (group === "env") {
+                const prev = document.getElementById("be-env-preview");
+                if (prev) prev.style.background = color;
+            }
+        }
+        function _getSelectedColor(rowId) {
+            const sel = document.querySelector(`#${rowId} .color-swatch-btn.selected`);
+            if (sel) return sel.dataset.color;
+            const ci = document.getElementById(rowId.replace("-row", "") + (rowId.includes("env") ? "env-color-custom" : rowId.includes("accent") ? "accent-color-custom" : "body-color-custom"));
+            return ci?.value || "#6e42bd";
+        }
+
+        function bePreviewEnv() {
+            _v("pv-icon", _gv("env-icon")); // actually set text
+            document.getElementById("pv-icon").textContent = _gv("env-icon");
+            document.getElementById("pv-title").textContent = _gv("env-title");
+            document.getElementById("pv-sub").textContent = _gv("env-sub");
+        }
+
+        /* ─── BUILD + SAVE LETTER ─── */
+        function beSaveLetter() {
+            if (!beEditingLetter) return;
+            const l = beEditingLetter;
+            l.template = document.querySelector(".tmpl-card.selected")?.dataset.tmpl || "classic";
+            l.envelope = {
+                icon: _gv("env-icon"), title: _gv("env-title"), subtitle: _gv("env-sub"),
+                color: _getSelectedSwatch("env-color-row"),
+                borderColor: _darken(_getSelectedSwatch("env-color-row"))
+            };
+            const font = document.querySelector(".font-btn.selected")?.dataset.font || "Dancing Script";
+            const accent = _getSelectedSwatch("accent-color-row");
+            const body = _getSelectedSwatch("body-color-row");
+            l.style = { font, accentColor: accent, titleColor: accent, bodyColor: body, headerGradientFrom: _lighten(l.envelope.color), headerGradientTo: l.envelope.color, tearColor: l.envelope.color };
+            const paras = [...document.querySelectorAll("#para-list .be-textarea")].map(t => t.value.trim()).filter(Boolean);
+            l.content = {
+                date: "auto",
+                title: _gv("letter-title"), salutation: _gv("letter-salutation"),
+                paragraphs: paras, signOff: _gv("letter-signoff"), name: _gv("letter-name"),
+                decorations: {
+                    topFlowers: _getPills("deco-top-pills"),
+                    bottomFlowers: _getPills("deco-bot-pills"),
+                    cornerFlowers: _getPills("deco-corner-pills"),
+                    dividerFlower: _gv("deco-divider")
+                }
+            };
+            // Update in array
+            const idx = beData.letters.findIndex(x => x.id === l.id);
+            if (idx === -1) beData.letters.push(l); else beData.letters[idx] = l;
+            bePushFile("data/letters.json", { letters: beData.letters }, "Save letter: " + l.envelope.title);
+            beCancelEdit();
+            toast("Letter saved! 💜", "ok");
+        }
+
+        function _getSelectedSwatch(rowId) {
+            const sel = document.querySelector(`#${rowId} .color-swatch-btn.selected`);
+            if (sel) return sel.dataset.color;
+            // fallback to color input
+            const ids = { "env-color-row": "env-color-custom", "accent-color-row": "accent-color-custom", "body-color-row": "body-color-custom" };
+            return document.getElementById(ids[rowId])?.value || "#6e42bd";
+        }
+        function _lighten(hex) { try { const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16); return `#${Math.min(255, r + 30).toString(16).padStart(2, "0")}${Math.min(255, g + 30).toString(16).padStart(2, "0")}${Math.min(255, b + 30).toString(16).padStart(2, "0")}`; } catch { return hex; } }
+        function _darken(hex) { try { const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16); return `#${Math.max(0, r - 40).toString(16).padStart(2, "0")}${Math.max(0, g - 40).toString(16).padStart(2, "0")}${Math.max(0, b - 40).toString(16).padStart(2, "0")}`; } catch { return hex; } }
+
+        /* ═══════════════════════════════════════
+           VLOGS / ALOGS
+        ═══════════════════════════════════════ */
+        function renderVlogsList() {
+            const el = document.getElementById("be-vlogs-list"); el.innerHTML = "";
+            (beData.vlogs.vlogs || []).forEach((v, i) => {
+                const d = document.createElement("div"); d.className = "log-list-item";
+                d.innerHTML = `<span style="font-size:1.2rem">🎬</span><div class="lli-info"><div class="log-date-lbl">${v.date} — ${v.time}</div><div class="log-url-lbl">${v.ytUrl || ""}</div></div><button class="log-del" onclick="beDelLog('vlog',${i})">🗑</button>`;
+                el.appendChild(d);
+            });
+            if (!(beData.vlogs.vlogs || []).length) el.innerHTML = '<p style="color:var(--lav-300);font-style:italic;font-size:.88rem;padding:.5rem 0">No video logs yet.</p>';
+        }
+        function renderAlogsList() {
+            const el = document.getElementById("be-alogs-list"); el.innerHTML = "";
+            (beData.vlogs.alogs || []).forEach((v, i) => {
+                const d = document.createElement("div"); d.className = "log-list-item";
+                d.innerHTML = `<span style="font-size:1.2rem">🎙</span><div class="lli-info"><div class="log-date-lbl">${v.date} — ${v.time}</div><div class="log-url-lbl">${v.ytUrl || ""}</div></div><button class="log-del" onclick="beDelLog('alog',${i})">🗑</button>`;
+                el.appendChild(d);
+            });
+            if (!(beData.vlogs.alogs || []).length) el.innerHTML = '<p style="color:var(--lav-300);font-style:italic;font-size:.88rem;padding:.5rem 0">No audio logs yet.</p>';
+        }
+
+        function beAddLog(type) {
+            const isV = type === "vlog";
+            const date = _gv(type + "-date"); const time = _gv(type + "-time"); const url = _gv(type + "-url");
+            if (!date || !url) { toast("Date and URL are required", "err"); return; }
+            const arr = isV ? (beData.vlogs.vlogs = beData.vlogs.vlogs || []) : (beData.vlogs.alogs = beData.vlogs.alogs || []);
+            arr.unshift({ date, time, ytUrl: url });
+            _v(type + "-date", ""); _v(type + "-time", ""); _v(type + "-url", "");
+            isV ? renderVlogsList() : renderAlogsList();
+            bePushFile("data/vlogs.json", beData.vlogs, "Add " + (isV ? "video" : "audio") + " log");
+            toast((isV ? "Video" : "Audio") + " log added! 🎬", "ok");
+        }
+        function beDelLog(type, idx) {
+            if (!confirm("Remove this log?")) return;
+            const isV = type === "vlog";
+            if (isV) beData.vlogs.vlogs.splice(idx, 1); else beData.vlogs.alogs.splice(idx, 1);
+            isV ? renderVlogsList() : renderAlogsList();
+            bePushFile("data/vlogs.json", beData.vlogs, "Delete log");
+            toast("Removed", "ok");
+        }
+
+        /* ═══════════════════════════════════════
+           PLAYLIST
+        ═══════════════════════════════════════ */
+        function renderSongList() {
+            const el = document.getElementById("be-song-list"); el.innerHTML = "";
+            (beData.playlist.songs || []).forEach((s, i) => {
+                const d = document.createElement("div"); d.className = "song-item";
+                d.innerHTML = `<span class="song-drag">⠿</span><div class="song-info"><div class="song-title">${s.title}</div><div class="song-id">${s.ytId}</div></div><button class="song-del" onclick="beDelSong(${i})">🗑</button>`;
+                el.appendChild(d);
+            });
+            if (!(beData.playlist.songs || []).length) el.innerHTML = '<p style="color:var(--lav-300);font-style:italic;font-size:.88rem;padding:.5rem 0">No songs yet.</p>';
+        }
+
+        function extractYtIdBE(url) {
+            if (!url) return null;
+            const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([A-Za-z0-9_-]{11})/);
+            return m ? m[1] : url.length === 11 ? url : null;
+        }
+
+        function beAddSong() {
+            const title = _gv("song-title"); const url = _gv("song-url");
+            if (!title || !url) { toast("Title and URL are required", "err"); return; }
+            const ytId = extractYtIdBE(url);
+            if (!ytId) { toast("Couldn't read YouTube ID from that URL", "err"); return; }
+            beData.playlist.songs = beData.playlist.songs || [];
+            beData.playlist.songs.push({ title, ytId });
+            _v("song-title", ""); _v("song-url", "");
+            renderSongList();
+            bePushFile("data/playlist.json", beData.playlist, "Add song: " + title);
+            toast("Song added! 🎵", "ok");
+        }
+        function beDelSong(idx) {
+            if (!confirm("Remove this song?")) return;
+            beData.playlist.songs.splice(idx, 1);
+            renderSongList();
+            bePushFile("data/playlist.json", beData.playlist, "Delete song");
+            toast("Removed", "ok");
+        }
+
+        /* ═══════════════════════════════════════
+           GITHUB API
+        ═══════════════════════════════════════ */
+        function getGHConfig() {
+            return { user: localStorage.getItem("gh_user"), repo: localStorage.getItem("gh_repo"), branch: localStorage.getItem("gh_branch") || "main", token: localStorage.getItem("gh_token") };
+        }
+
+        async function bePushFile(path, content, message) {
+            const { user, repo, branch, token } = getGHConfig();
+            if (!user || !repo || !token) {
+                setSaveStatus("⚠ Set GitHub settings first");
+                toast("Please configure GitHub settings first ⚙", "err");
+                return;
+            }
+            setSaveStatus("Saving…");
+            try {
+                // Get current SHA
+                const getUrl = `https://api.github.com/repos/${user}/${repo}/contents/${path}`;
+                const headers = { "Authorization": "token " + token, "Content-Type": "application/json" };
+                let sha = null;
+                try { const r = await fetch(getUrl, { headers }); if (r.ok) { const d = await r.json(); sha = d.sha; } } catch (x) { }
+                // Push
+                const body = { message, content: btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2)))), branch };
+                if (sha) body.sha = sha;
+                const res = await fetch(getUrl, { method: "PUT", headers, body: JSON.stringify(body) });
+                if (res.ok) { setSaveStatus("Saved ✓ " + new Date().toLocaleTimeString()); }
+                else { const err = await res.json(); setSaveStatus("Error: " + err.message); toast("GitHub error: " + err.message, "err"); }
+            } catch (e) { setSaveStatus("Network error"); toast("Could not reach GitHub", "err"); }
+        }
+
+        /* ═══════════════════════════════════════
+           SETTINGS
+        ═══════════════════════════════════════ */
+        function loadSettingsUI() {
+            _v("gh-user", localStorage.getItem("gh_user") || "");
+            _v("gh-repo", localStorage.getItem("gh_repo") || "");
+            _v("gh-branch", localStorage.getItem("gh_branch") || "main");
+            // Don't pre-fill token for security
+        }
+        function openSettings() { document.getElementById("be-modal-bg").classList.add("show"); }
+        function closeSettings() { document.getElementById("be-modal-bg").classList.remove("show"); }
+        function saveSettings() {
+            localStorage.setItem("gh_user", _gv("gh-user"));
+            localStorage.setItem("gh_repo", _gv("gh-repo"));
+            localStorage.setItem("gh_branch", _gv("gh-branch") || "main");
+            if (_gv("gh-token")) localStorage.setItem("gh_token", _gv("gh-token"));
+            closeSettings();
+            toast("Settings saved 💜", "ok");
+        }
+
+        /* ═══════════════════════════════════════
+           UTILS
+        ═══════════════════════════════════════ */
+        function setSaveStatus(msg) { const el = document.getElementById("be-save-status"); if (el) el.textContent = msg; }
+        let toastTimer = null;
+        function toast(msg, type = "") {
+            const el = document.getElementById("be-toast");
+            el.textContent = msg; el.className = "be-toast show " + (type || "");
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => { el.classList.remove("show"); }, 3000);
+        }
+    </script>
+</body>
+
+</html>
