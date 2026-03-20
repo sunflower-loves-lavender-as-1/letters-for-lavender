@@ -1,60 +1,61 @@
 {
-    "letters": [
-        {
-            "id": "letter-1",
-            "number": 1,
-            "template": "classic",
-            "envelope": {
-                "color": "#ddd4f9",
-                "borderColor": "#c4b4f4",
-                "icon": "🌸",
-                "title": "A Sweet Hello",
-                "subtitle": "Just thinking of you today…"
-            },
-            "style": {
-                "headerGradientFrom": "#f0ebff",
-                "headerGradientTo": "#ddd4f9",
-                "accentColor": "#6e42bd",
-                "titleColor": "#5530a0",
-                "bodyColor": "#3d2d5e",
-                "font": "Dancing Script",
-                "tearColor": "#c4b4f4"
-            },
-            "content": {
-                "date": "auto",
-                "title": "A Sweet Hello 🌷",
-                "salutation": "Hey, you 🌷",
-                "paragraphs": [
-                    "I was just sitting here, doing absolutely nothing important, and somehow — as always — my mind wandered straight to you. 💭",
-                    "I don't know if you realize how often that happens. How a random song, a colour, a quiet moment in the evening, will quietly remind me that you exist — and that somehow makes everything feel a little warmer. 🌙",
-                    "I know lavender is your colour, and honestly, I think that suits you perfectly — gentle, beautiful, and with a kind of quiet magic that stays with you long after you've stopped looking. 💜",
-                    "I'm not writing this because I need an answer to anything. I'm writing this because you deserve to know — on a completely ordinary day — that someone out here thinks the world is a much better place just because *you're* in it. 🌟",
-                    "No pressure, no rush, no expectations. Just a small note to say: *hello, I'm thinking of you, and I hope your day has at least one moment that makes you smile.* 🌸"
-                ],
-                "signOff": "With a gentle heart,",
-                "name": "— Your Admirer 💜",
-                "decorations": {
-                    "topFlowers": [
-                        "🪻",
-                        "💜",
-                        "🌿",
-                        "🌸",
-                        "✨"
-                    ],
-                    "bottomFlowers": [
-                        "🌷",
-                        "🪻",
-                        "🌷"
-                    ],
-                    "dividerFlower": "🪻",
-                    "cornerFlowers": [
-                        "🌸",
-                        "🪻",
-                        "✨",
-                        "💜"
-                    ]
-                }
-            }
+  "letters": [
+    {
+      "id": "letter-1",
+      "number": 1,
+      "template": "classic",
+      "envelope": {
+        "icon": "🌸",
+        "title": "A Sweet Hello",
+        "subtitle": "Just thinking of you today…",
+        "color": "#ddd4f9",
+        "borderColor": "#b5acd1"
+      },
+      "style": {
+        "font": "Dancing Script",
+        "accentColor": "#6e42bd",
+        "titleColor": "#6e42bd",
+        "bodyColor": "#3d2d5e",
+        "headerGradientFrom": "#fbf2ff",
+        "headerGradientTo": "#ddd4f9",
+        "tearColor": "#ddd4f9"
+      },
+      "content": {
+        "date": "auto",
+        "title": "Hellooooooo",
+        "salutation": "Hi Lavender 🪻",
+        "paragraphs": [
+          "It's me Sunflower 🌻",
+          "I don't know if you realize how often that happens. How a random song, a colour, a quiet moment in the evening, will quietly remind me that you exist and that somehow makes everything feel a little warmer.",
+          "I know lavender is your colour, and honestly, I think that suits you perfectly  gentle, beautiful, and with a kind of quiet magic that stays with you long after you've stopped looking. 💜",
+          "I'm not writing this because I need an answer to anything. I'm writing this because you deserve to know on a completely ordinary day that someone out here thinks the world is a much better place just because *you're* in it. 🌟",
+          "No pressure, no rush, no expectations. Just a small note to say: *hello, I'm thinking of you, and I hope your day has at least one moment that makes you smile.* 🌸",
+          "I Hope you smile when you read this letter :)"
+        ],
+        "signOff": "Pouring Love",
+        "name": "- Sunflower 🌻",
+        "decorations": {
+          "topFlowers": [
+            "🪻",
+            "💜",
+            "🌿",
+            "🌸",
+            "✨"
+          ],
+          "bottomFlowers": [
+            "🌷",
+            "🪻",
+            "🌷"
+          ],
+          "cornerFlowers": [
+            "🌸",
+            "🪻",
+            "✨",
+            "💜"
+          ],
+          "dividerFlower": "🪻"
         }
-    ]
+      }
+    }
+  ]
 }
