@@ -113,6 +113,63 @@
           "dividerFlower": "🌻"
         }
       }
+    },
+    {
+      "id": "letter-1774049123776",
+      "number": 3,
+      "template": "classic",
+      "envelope": {
+        "icon": "🌸",
+        "title": "A Letter That Traveled Miles Just for You 💌",
+        "subtitle": "Because distance can’t stop something this soft 💫",
+        "color": "#e8f5e9",
+        "borderColor": "#c0cdc1"
+      },
+      "style": {
+        "font": "Great Vibes",
+        "accentColor": "#bf3bae",
+        "titleColor": "#bf3bae",
+        "bodyColor": "#f273db",
+        "headerGradientFrom": "#ffffff",
+        "headerGradientTo": "#e8f5e9",
+        "tearColor": "#e8f5e9"
+      },
+      "content": {
+        "date": "auto",
+        "title": "If This Reaches You, Smile a Little 😊",
+        "salutation": "Hi Lavender 🪻",
+        "paragraphs": [
+          "If this were a real letter, it would probably be a little crumpled from the journey, maybe carrying a faint scent of something familiar… and definitely filled with pieces of me in every word 💌✨",
+          "But even like this, through a screen, I hope you can still feel it—the way I paused before writing your name, the way I smiled without realizing, the way you quietly took over my thoughts again 💭💗",
+          "I think what we have is kind of special… not loud, not rushed, just slowly growing in its own calm, beautiful way 🌱🤍",
+          "Sometimes I wonder… if we were in the same place, would I be handing you this letter shyly? Or teasing you while you read it? Maybe both 😌✨",
+          "Until that day comes, I’ll keep sending you these little pieces of me… words pretending to be paper, feelings pretending to be ink 🖋️💞",
+          "So whenever you read this, just know—somewhere, someone is thinking of you a little too much and smiling like an idiot because of it 😄💘"
+        ],
+        "signOff": "Folded with care and a little bit of you in every line 💭",
+        "name": "- 🌳Sunflower 🌻",
+        "decorations": {
+          "topFlowers": [
+            "🪻",
+            "💜",
+            "🌸",
+            "🌳"
+          ],
+          "bottomFlowers": [
+            "🌷",
+            "🪻",
+            "🌷",
+            "💚"
+          ],
+          "cornerFlowers": [
+            "🌸",
+            "🪻",
+            "✨",
+            "💜"
+          ],
+          "dividerFlower": "🪻"
+        }
+      }
     }
   ]
 }
