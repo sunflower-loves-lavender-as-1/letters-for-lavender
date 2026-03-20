@@ -80,7 +80,7 @@
   translate(-9999px) moves it off-screen without clipping it.
 -->
     <div id="yt-music-host"
-        style="position:fixed;width:1px;height:1px;bottom:0;left:0;transform:translate(-9999px,-9999px);pointer-events:none;z-index:-1;">
+        style="position:fixed;width:200px;height:200px;bottom:0;left:0;transform:translate(-9999px,-9999px);pointer-events:none;z-index:-1;">
         <div id="yt-music-iframe"></div>
     </div>
 
@@ -185,8 +185,8 @@
     <button class="scroll-top-btn" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
     <canvas id="dl-canvas"></canvas>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script src="script.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 
 </html>

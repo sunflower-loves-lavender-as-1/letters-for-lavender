@@ -31,12 +31,25 @@ function toggleEye() {
 /* ═══════════════════════════════════════════════════════
    BOOT
 ═══════════════════════════════════════════════════════ */
+let playlistLoaded = false;
+let musicInitializationAttempted = false;
+
+function tryInitMusic() {
+    if (musicInitializationAttempted) return;
+    if (!playlistLoaded || !window.ytMusicAPIReady) return;
+    if (!PLAYLIST.length) return;
+
+    musicInitializationAttempted = true;
+    console.log("tryInitMusic: both playlist and API ready, initializing player");
+    initMusicPlayer();
+}
+
 function onUnlock() {
     initPetals();
     loadLetters();
     loadVlogs();
     loadPlaylist();
-    if (window.ytMusicAPIReady) initMusicPlayer();
+    tryInitMusic();
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -428,11 +441,7 @@ window.ytMusicAPIReady = false;
 window.onYouTubeIframeAPIReady = function () {
     window.ytMusicAPIReady = true;
     console.log("YouTube IFrame API ready: true");
-    if (document.getElementById("main").classList.contains("visible")) initMusicPlayer();
-    if (!musicYT && PLAYLIST.length) {
-        console.log("Playlist already loaded while API became ready → initializing music player");
-        initMusicPlayer();
-    }
+    tryInitMusic();
     (window._lavPending || []).forEach(pid => {
         const el = document.querySelector(`[data-pid="${pid}"]`);
         if (el) _mkLavPlayer(pid, el.dataset.ytid);
@@ -471,18 +480,17 @@ async function loadPlaylist() {
     }
     PLAYLIST = [...MASTER_LIST];
     buildPlaylistUI();
+    playlistLoaded = true;
     const apiState = window.ytMusicAPIReady ? "true" : "false (waiting for API callback)";
     console.log("Playlist loaded:", PLAYLIST.length, "songs, API ready:", apiState);
 
-    // Initialize music player when API is ready
-    if (window.ytMusicAPIReady && !musicYT && PLAYLIST.length) {
-        console.log("Initializing music player now...");
-        initMusicPlayer();
-    } else if (PLAYLIST.length && !window.ytMusicAPIReady) {
-        // API might load later; next API callback does init, but also retry once
+    tryInitMusic();
+
+    if (PLAYLIST.length && !window.ytMusicAPIReady) {
+        // Additional fallback in case API callback is delayed
         setTimeout(() => {
             if (window.ytMusicAPIReady && !musicYT) {
-                console.log("Initializing music player (delayed)...");
+                console.log("Initializing music player (delayed fallback)...");
                 initMusicPlayer();
             }
         }, 500);
@@ -731,6 +739,7 @@ function refreshMusicAPI() {
     }
 
     window.ytMusicAPIReady = false;
+    musicInitializationAttempted = false;
     if (musicYT) {
         try { musicYT.destroy(); } catch (x) { }
         musicYT = null;
