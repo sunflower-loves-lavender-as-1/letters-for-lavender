@@ -1,8 +1,16 @@
 {
-    "songs": [
-        {
-            "title": "Add her first song here",
-            "ytId": "dQw4w9WgXcQ"
-        }
-    ]
+  "songs": [
+    {
+      "title": "back to friends",
+      "ytId": "c-8abSPAPOU"
+    },
+    {
+      "title": "Space Song",
+      "ytId": "jVG_Q5pyMaM"
+    },
+    {
+      "title": "Put The Sun Back",
+      "ytId": "kY-t1Tp67T8"
+    }
+  ]
 }
