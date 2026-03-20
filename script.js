@@ -64,7 +64,7 @@ function switchTab(name, idx) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   LETTER SYSTEM  —  template-based rendering
+   LETTER SYSTEM
 ═══════════════════════════════════════════════════════ */
 async function loadLetters() {
     const feed = document.getElementById("letters-feed");
@@ -72,12 +72,8 @@ async function loadLetters() {
         const res = await fetch("data/letters.json?_=" + Date.now());
         const data = await res.json();
         const letters = data.letters || [];
-        if (!letters.length) {
-            feed.innerHTML = '<p class="vlog-empty">No letters yet — check back soon 💜</p>';
-            return;
-        }
+        if (!letters.length) { feed.innerHTML = '<p class="vlog-empty">No letters yet — check back soon 💜</p>'; return; }
         feed.innerHTML = "";
-        // Load all templates needed, then render
         const needed = [...new Set(letters.map(l => l.template || "classic"))];
         await Promise.all(needed.map(loadTemplate));
         letters.forEach((letter, i) => renderLetter(letter, i, feed));
@@ -86,7 +82,6 @@ async function loadLetters() {
         console.error("loadLetters:", e);
     }
 }
-
 function loadTemplate(name) {
     return new Promise((resolve) => {
         if (window.LetterTemplates && window.LetterTemplates[name]) return resolve();
@@ -97,42 +92,29 @@ function loadTemplate(name) {
         document.head.appendChild(s);
     });
 }
-
 function renderLetter(letter, index, feed) {
     const wrapper = document.createElement("div");
     wrapper.className = "envelope-wrapper";
-
     const label = document.createElement("p");
     label.className = "envelope-label";
     label.textContent = `🌷 Letter No. ${letter.number || (index + 1)}`;
     wrapper.appendChild(label);
-
     const slot = document.createElement("div");
     slot.id = `slot-${letter.id}`;
     wrapper.appendChild(slot);
-
     feed.appendChild(wrapper);
-
     const tmplName = letter.template || "classic";
     const tmpl = window.LetterTemplates && window.LetterTemplates[tmplName];
-    if (tmpl && tmpl.render) {
-        tmpl.render(letter, slot);
-    } else {
-        slot.innerHTML = `<p class="vlog-empty">Template "${tmplName}" not found.</p>`;
-    }
+    if (tmpl && tmpl.render) { tmpl.render(letter, slot); }
+    else { slot.innerHTML = `<p class="vlog-empty">Template "${tmplName}" not found.</p>`; }
 }
 
-/* ── Envelope / Letter controls (called by templates) ── */
 window.closeLetter = function (letterId) {
     const card = document.getElementById(letterId + "-card");
     const env = document.getElementById(letterId + "-env");
     if (card) card.classList.remove("open");
-    if (env) {
-        _resetPeel(env);
-        setTimeout(() => env.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
-    }
+    if (env) { _resetPeel(env); setTimeout(() => env.scrollIntoView({ behavior: "smooth", block: "start" }), 80); }
 };
-
 window.downloadLetter = async function (letterId) {
     const el = document.getElementById(letterId + "-card");
     if (!el) return;
@@ -145,7 +127,8 @@ window.downloadLetter = async function (letterId) {
 };
 async function _doDownload(el, letterId) {
     const btn = el.querySelector(".download-btn");
-    const orig = btn?.innerHTML; if (btn) { btn.innerHTML = "⏳ Preparing…"; btn.disabled = true; }
+    const orig = btn?.innerHTML;
+    if (btn) { btn.innerHTML = "⏳ Preparing…"; btn.disabled = true; }
     try {
         const cv = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: "#fefcf8", logging: false });
         const a = document.createElement("a"); a.download = "letter-for-you.png"; a.href = cv.toDataURL("image/png"); a.click();
@@ -154,114 +137,82 @@ async function _doDownload(el, letterId) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   PEEL-STRIP OPEN  — horizontal left-to-right tear
-   Strip sits below the letter title. No torn-piece clone.
-   Mouse listeners are stored and cleaned up on reset.
+   PEEL-STRIP OPEN
 ═══════════════════════════════════════════════════════════ */
 window.setupTear = function (env) {
     const letterId = env.dataset.letter;
     const envW = env.offsetWidth || 320;
     const envH = env.offsetHeight || 120;
-
     const STRIP_H = 34;
-    // Push strip to 62% — well below the title text
     const STRIP_Y = Math.floor(envH * 0.62);
 
-    /* ── 1. cover: masks the area above the strip until peeled ── */
     const cover = document.createElement("div");
     cover.className = "ps-cover";
     cover.style.height = STRIP_Y + "px";
     env.appendChild(cover);
 
-    /* ── 2. The peel strip ── */
     const strip = document.createElement("div");
     strip.className = "ps-strip";
     strip.style.top = STRIP_Y + "px";
     strip.style.height = STRIP_H + "px";
     strip.innerHTML = `
-    <div class="ps-perf ps-perf-top"></div>
-    <div class="ps-inner">
-      <span class="ps-notch"></span>
-      <span class="ps-label">pull to open</span>
-      <span class="ps-arrows"><span></span><span></span><span></span></span>
-    </div>
-    <div class="ps-perf ps-perf-bot"></div>
-  `;
+        <div class="ps-perf ps-perf-top"></div>
+        <div class="ps-inner">
+            <span class="ps-notch"></span>
+            <span class="ps-label">pull to open</span>
+            <span class="ps-arrows"><span></span><span></span><span></span></span>
+        </div>
+        <div class="ps-perf ps-perf-bot"></div>
+    `;
     env.appendChild(strip);
 
-    /* ── Interaction state ── */
-    let startX = 0, startY = 0;
-    let progress = 0;
-    let active = false;
+    let startX = 0, startY = 0, progress = 0, active = false;
 
-    // Resistance: first 20% of drag feels slow, then linear
     function easeProgress(raw) {
         const p = Math.min(Math.max(raw, 0), 1);
         return p < 0.2 ? Math.pow(p / 0.2, 1.4) * 0.2 : p;
     }
-
     function applyProgress(p) {
         const ep = easeProgress(p);
         const clipPct = (ep * 100).toFixed(1) + "%";
         strip.style.clipPath = `inset(0 0 0 ${clipPct})`;
         cover.style.clipPath = `inset(0 0 0 ${clipPct})`;
     }
-
     function pointerStart(e) {
         if (env.dataset.done === "1") return;
         const pt = e.touches ? e.touches[0] : e;
         const rect = env.getBoundingClientRect();
         const relY = pt.clientY - rect.top;
-        // Only engage if finger is on or near the strip zone
         if (relY < STRIP_Y - 8 || relY > STRIP_Y + STRIP_H + 8) return;
-        startX = pt.clientX;
-        startY = pt.clientY;
-        progress = 0;
-        active = true;
+        startX = pt.clientX; startY = pt.clientY; progress = 0; active = true;
         env.classList.add("ps-peeling");
     }
-
     function pointerMove(e) {
         if (!active || env.dataset.done === "1") return;
         const pt = e.touches ? e.touches[0] : e;
         const rawDx = pt.clientX - startX;
         const rawDy = pt.clientY - startY;
-        // Require horizontal dominance
         if (Math.abs(rawDx) < Math.abs(rawDy) * 0.8 && Math.abs(rawDx) < 8) return;
         if (e.cancelable) e.preventDefault();
         progress = Math.max(0, rawDx) / envW;
         applyProgress(progress);
         if (progress >= 1) _finishPeel(env, strip, cover, letterId, cleanup);
     }
-
     function pointerEnd() {
         if (!active || env.dataset.done === "1") return;
         active = false;
         env.classList.remove("ps-peeling");
         if (progress < 0.32) {
-            // Snap back
             strip.style.transition = "clip-path .4s cubic-bezier(.34,1.56,.64,1)";
             cover.style.transition = "clip-path .4s cubic-bezier(.34,1.56,.64,1)";
             strip.style.clipPath = "inset(0 0 0 0%)";
             cover.style.clipPath = "inset(0 0 0 0%)";
-            setTimeout(() => {
-                strip.style.transition = "";
-                cover.style.transition = "";
-            }, 420);
-        } else {
-            _finishPeel(env, strip, cover, letterId, cleanup);
-        }
+            setTimeout(() => { strip.style.transition = ""; cover.style.transition = ""; }, 420);
+        } else { _finishPeel(env, strip, cover, letterId, cleanup); }
     }
-
-    // Store references so they can be removed on cleanup
     const onMM = e => { if (active) pointerMove(e); };
     const onMU = () => { if (active) pointerEnd(); };
-
-    function cleanup() {
-        window.removeEventListener("mousemove", onMM);
-        window.removeEventListener("mouseup", onMU);
-    }
-
+    function cleanup() { window.removeEventListener("mousemove", onMM); window.removeEventListener("mouseup", onMU); }
     env.addEventListener("touchstart", pointerStart, { passive: true });
     env.addEventListener("touchmove", pointerMove, { passive: false });
     env.addEventListener("touchend", pointerEnd);
@@ -269,59 +220,37 @@ window.setupTear = function (env) {
     env.addEventListener("mousedown", pointerStart);
     window.addEventListener("mousemove", onMM);
     window.addEventListener("mouseup", onMU);
-
-    // Store cleanup ref on env so _resetPeel can call it
     env._peelCleanup = cleanup;
 };
-
 function _finishPeel(env, strip, cover, letterId, cleanup) {
     if (env.dataset.done === "1") return;
     env.dataset.done = "1";
-
-    // Remove global mouse listeners immediately — prevents re-peel glitch
     if (cleanup) cleanup();
     if (env._peelCleanup) { env._peelCleanup(); env._peelCleanup = null; }
-
-    // Sweep strip fully off then reveal letter
     strip.style.transition = "clip-path .16s linear";
     cover.style.transition = "clip-path .16s linear";
     strip.style.clipPath = "inset(0 0 0 100%)";
     cover.style.clipPath = "inset(0 0 0 100%)";
-
     setTimeout(() => {
         env.style.display = "none";
         const card = document.getElementById(letterId + "-card");
-        if (card) {
-            card.classList.add("open");
-            setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
-        }
+        if (card) { card.classList.add("open"); setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "start" }), 80); }
     }, 300);
 }
-
-/* ── Reset peel (called by closeLetter) ── */
 function _resetPeel(env) {
-    // Remove any lingering global listeners first
     if (env._peelCleanup) { env._peelCleanup(); env._peelCleanup = null; }
-
     delete env.dataset.done;
     env.style.display = "";
     env.classList.remove("ps-peeling");
-
-    // Remove old strip and cover to ensure fresh state
     const cover = env.querySelector(".ps-cover");
     const strip = env.querySelector(".ps-strip");
-
     if (cover) cover.remove();
     if (strip) strip.remove();
-
-    env._peelCleanup = null;
-
-    // Re-create fresh strip setup so animation works on next peel
     if (window.setupTear) window.setupTear(env);
 }
 
 /* ═══════════════════════════════════════════════════════
-   SPARKLE  (exported so templates can call it)
+   SPARKLE
 ═══════════════════════════════════════════════════════ */
 window.sparkle = function (e, emoji) {
     if (e && e.stopPropagation) e.stopPropagation();
@@ -332,14 +261,13 @@ window.sparkle = function (e, emoji) {
 };
 
 /* ═══════════════════════════════════════════════════════
-   VLOGS  —  reads data/vlogs.json
+   VLOGS
 ═══════════════════════════════════════════════════════ */
 function extractYtId(url) {
     if (!url) return null;
     const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
     return m ? m[1] : null;
 }
-
 async function loadVlogs() {
     try {
         const r = await fetch("data/vlogs.json?_=" + Date.now());
@@ -353,7 +281,6 @@ async function loadVlogs() {
         document.getElementById("alogs-feed").innerHTML = '<p class="vlog-empty">No audio logs yet — one is coming soon 💜</p>';
     }
 }
-
 function renderLogFeed(feedId, items, isVideo) {
     const feed = document.getElementById(feedId);
     if (!items.length) { feed.innerHTML = `<p class="vlog-empty">${isVideo ? "No video logs yet — check back soon 🌙" : "No audio logs yet — one is coming soon 💜"}</p>`; return; }
@@ -366,11 +293,11 @@ function renderLogFeed(feedId, items, isVideo) {
         feed.appendChild(row);
     });
 }
-
 function toggleLogRow(row) {
     const isExpanded = row.classList.contains("expanded");
     const body = row.querySelector(".log-row-body");
-    const ytId = row.dataset.ytId; const isAudio = row.dataset.isAudio === "1";
+    const ytId = row.dataset.ytId;
+    const isAudio = row.dataset.isAudio === "1";
     if (isExpanded) { row.classList.remove("expanded"); setTimeout(() => { body.innerHTML = ""; }, 400); return; }
     if (!body.innerHTML.trim()) body.innerHTML = buildLavPlayerHTML(ytId, isAudio, row.querySelector(".log-row-date").textContent);
     row.classList.add("expanded");
@@ -378,7 +305,7 @@ function toggleLogRow(row) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   LAVENDER PLAYER
+   LAVENDER VIDEO/AUDIO PLAYER
 ═══════════════════════════════════════════════════════ */
 let lavPlayerCounter = 0;
 const lavPlayers = {};
@@ -388,7 +315,7 @@ function buildLavPlayerHTML(ytId, isAudio, title) {
     return `<div class="lav-player${isAudio ? " audio-only" : ""}" data-pid="${pid}" data-ytid="${ytId}" data-audio="${isAudio ? 1 : 0}">
     <div class="lav-title-bar">${title}</div>
     <div class="lav-audio-vis" id="${pid}-vis"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-    <div class="lav-player-iframe-wrap"><div id="${pid}-yt"></div><div class="lav-tap-overlay" id="${pid}-tap" onclick="lavTapToggle('${pid}')"></div><div class="lav-buffering" id="${pid}-buf"><div class="spinner"></div></div></div>
+    <div class="lav-player-iframe-wrap"><div id="${pid}-yt"></div><div class="lav-tap-overlay" onclick="lavTapToggle('${pid}')"></div><div class="lav-buffering" id="${pid}-buf"><div class="spinner"></div></div></div>
     <div class="lav-controls">
       <div class="lav-progress-wrap">
         <span class="lav-time" id="${pid}-cur">0:00</span>
@@ -400,8 +327,8 @@ function buildLavPlayerHTML(ytId, isAudio, title) {
       </div>
       <div class="lav-btn-row">
         <button class="lav-btn lav-playpause" id="${pid}-pp" onclick="lavTogglePlay('${pid}')">
-          <svg id="${pid}-play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          <svg id="${pid}-pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          <svg id="${pid}-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
+          <svg id="${pid}-pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>
         </button>
         <button class="lav-btn" onclick="lavSeek('${pid}',-10)" title="-10s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg><span style="font-size:.55rem;color:currentColor;margin-top:-2px">-10</span></button>
         <button class="lav-btn" onclick="lavSeek('${pid}',10)" title="+10s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.01 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/></svg><span style="font-size:.55rem;color:currentColor;margin-top:-2px">+10</span></button>
@@ -413,45 +340,61 @@ function buildLavPlayerHTML(ytId, isAudio, title) {
     </div>
   </div>`;
 }
-
 function initLavPlayer(pid) {
     const el = document.querySelector(`[data-pid="${pid}"]`);
     if (!el || lavPlayers[pid]) return;
-    const ytId = el.dataset.ytid; const isAudio = el.dataset.audio === "1";
+    const ytId = el.dataset.ytid;
+    const isAudio = el.dataset.audio === "1";
     lavPlayers[pid] = { ytPlayer: null, playing: false, muted: false, speed: 1, seeking: false };
     if (!window.YT || !window.YT.Player) { (window._lavPending = window._lavPending || []).push(pid); return; }
-    _mkLavPlayer(pid, ytId, isAudio);
+    _mkLavPlayer(pid, ytId);
 }
-function _mkLavPlayer(pid, ytId, isAudio) {
+function _mkLavPlayer(pid, ytId) {
     const st = lavPlayers[pid];
     st.ytPlayer = new YT.Player(`${pid}-yt`, {
-        videoId: ytId, playerVars: { autoplay: 0, controls: 0, disablekb: 1, fs: 0, modestbranding: 1, rel: 0, iv_load_policy: 3, playsinline: 1, origin: location.origin || "https://localhost" }, events: {
+        videoId: ytId,
+        playerVars: { autoplay: 0, controls: 0, disablekb: 1, fs: 0, modestbranding: 1, rel: 0, iv_load_policy: 3, playsinline: 1, origin: location.origin || "https://localhost" },
+        events: {
             onReady: () => { _lavTick(pid); try { st.ytPlayer.setPlaybackQuality("auto"); } catch (x) { } },
             onStateChange: e => _lavState(pid, e.data),
-            onError: e => { document.getElementById(pid + "-buf")?.classList.remove("show"); }
+            onError: () => { document.getElementById(pid + "-buf")?.classList.remove("show"); }
         }
     });
 }
 function _lavState(pid, s) {
     const st = lavPlayers[pid]; if (!st) return;
-    const buf = document.getElementById(pid + "-buf"); const vis = document.getElementById(pid + "-vis");
-    if (s === YT.PlayerState.PLAYING) { st.playing = true; buf?.classList.remove("show"); _lavPlayIcon(pid, true); vis?.classList.add("playing"); try { const d = st.ytPlayer.getDuration() || 0; document.getElementById(pid + "-dur").textContent = _fmt(d); } catch (x) { } }
-    else if (s === YT.PlayerState.PAUSED || s === YT.PlayerState.ENDED) { st.playing = false; _lavPlayIcon(pid, false); vis?.classList.remove("playing"); }
-    else if (s === YT.PlayerState.BUFFERING) { buf?.classList.add("show"); }
+    const buf = document.getElementById(pid + "-buf");
+    const vis = document.getElementById(pid + "-vis");
+    if (s === YT.PlayerState.PLAYING) {
+        st.playing = true; buf?.classList.remove("show"); _lavPlayIcon(pid, true); vis?.classList.add("playing");
+        try { document.getElementById(pid + "-dur").textContent = _fmt(st.ytPlayer.getDuration() || 0); } catch (x) { }
+    } else if (s === YT.PlayerState.PAUSED || s === YT.PlayerState.ENDED) {
+        st.playing = false; _lavPlayIcon(pid, false); vis?.classList.remove("playing");
+    } else if (s === YT.PlayerState.BUFFERING) { buf?.classList.add("show"); }
 }
 function _lavPlayIcon(pid, p) {
-    const a = document.getElementById(pid + "-play-icon"); const b = document.getElementById(pid + "-pause-icon");
-    if (a) a.style.display = p ? "none" : "block"; if (b) b.style.display = p ? "block" : "none";
+    const a = document.getElementById(pid + "-play-icon");
+    const b = document.getElementById(pid + "-pause-icon");
+    if (a) a.style.display = p ? "none" : "block";
+    if (b) b.style.display = p ? "block" : "none";
 }
 function _lavTick(pid) {
     const st = lavPlayers[pid]; if (st._t) return;
     st._t = setInterval(() => {
         if (!st.ytPlayer || st.seeking) return;
         try {
-            const c = st.ytPlayer.getCurrentTime() || 0; const d = st.ytPlayer.getDuration() || 0;
+            const c = st.ytPlayer.getCurrentTime() || 0;
+            const d = st.ytPlayer.getDuration() || 0;
             if (d > 0) {
-                const pct = (c / d) * 100; const f = document.getElementById(pid + "-fill"); const th = document.getElementById(pid + "-thumb"); const ct = document.getElementById(pid + "-cur"); const dt = document.getElementById(pid + "-dur");
-                if (f) f.style.width = pct + "%"; if (th) th.style.right = (100 - pct) + "%"; if (ct) ct.textContent = _fmt(c); if (dt) dt.textContent = _fmt(d);
+                const pct = (c / d) * 100;
+                const f = document.getElementById(pid + "-fill");
+                const th = document.getElementById(pid + "-thumb");
+                const ct = document.getElementById(pid + "-cur");
+                const dt = document.getElementById(pid + "-dur");
+                if (f) f.style.width = pct + "%";
+                if (th) th.style.right = (100 - pct) + "%";
+                if (ct) ct.textContent = _fmt(c);
+                if (dt) dt.textContent = _fmt(d);
             }
         } catch (x) { }
     }, 500);
@@ -464,133 +407,304 @@ const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 function lavCycleSpeed(pid) { const st = lavPlayers[pid]; if (!st || !st.ytPlayer) return; st.speed = SPEEDS[(SPEEDS.indexOf(st.speed) + 1) % SPEEDS.length]; try { st.ytPlayer.setPlaybackRate(st.speed); } catch (x) { } const btn = document.getElementById(pid + "-speed"); if (btn) btn.textContent = st.speed + "×"; }
 function lavToggleMute(pid) { const st = lavPlayers[pid]; if (!st || !st.ytPlayer) return; st.muted = !st.muted; try { st.muted ? st.ytPlayer.mute() : st.ytPlayer.unMute(); } catch (x) { } document.getElementById(pid + "-vol-on").style.display = st.muted ? "none" : "block"; document.getElementById(pid + "-vol-off").style.display = st.muted ? "block" : "none"; }
 function lavFullscreen(pid) { const st = lavPlayers[pid]; if (!st || !st.ytPlayer) return; const ifr = st.ytPlayer.getIframe(); if (ifr) (ifr.requestFullscreen || ifr.webkitRequestFullscreen || ifr.mozRequestFullScreen || function () { })?.call(ifr); }
-function lavSeekStart(e, pid) { const st = lavPlayers[pid]; if (!st) return; st.seeking = true; _lavSeekMove(e, pid); const mm = ev => _lavSeekMove(ev, pid); const mu = () => { st.seeking = false; window.removeEventListener("mousemove", mm); window.removeEventListener("mouseup", mu); window.removeEventListener("touchmove", mm); window.removeEventListener("touchend", mu); }; window.addEventListener("mousemove", mm); window.addEventListener("mouseup", mu); window.addEventListener("touchmove", mm, { passive: true }); window.addEventListener("touchend", mu); }
-function _lavSeekMove(e, pid) { const st = lavPlayers[pid]; const tr = document.getElementById(pid + "-track"); if (!st || !tr || !st.ytPlayer) return; const rect = tr.getBoundingClientRect(); const cx = e.touches ? e.touches[0].clientX : e.clientX; const r = Math.min(Math.max((cx - rect.left) / rect.width, 0), 1); try { const d = st.ytPlayer.getDuration() || 0; if (d > 0) { st.ytPlayer.seekTo(r * d, true); const f = document.getElementById(pid + "-fill"); const th = document.getElementById(pid + "-thumb"); const ct = document.getElementById(pid + "-cur"); if (f) f.style.width = (r * 100) + "%"; if (th) th.style.right = ((1 - r) * 100) + "%"; if (ct) ct.textContent = _fmt(r * d); } } catch (x) { } }
+function lavSeekStart(e, pid) {
+    const st = lavPlayers[pid]; if (!st) return; st.seeking = true; _lavSeekMove(e, pid);
+    const mm = ev => _lavSeekMove(ev, pid);
+    const mu = () => { st.seeking = false; window.removeEventListener("mousemove", mm); window.removeEventListener("mouseup", mu); window.removeEventListener("touchmove", mm); window.removeEventListener("touchend", mu); };
+    window.addEventListener("mousemove", mm); window.addEventListener("mouseup", mu); window.addEventListener("touchmove", mm, { passive: true }); window.addEventListener("touchend", mu);
+}
+function _lavSeekMove(e, pid) {
+    const st = lavPlayers[pid]; const tr = document.getElementById(pid + "-track");
+    if (!st || !tr || !st.ytPlayer) return;
+    const rect = tr.getBoundingClientRect(); const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    const r = Math.min(Math.max((cx - rect.left) / rect.width, 0), 1);
+    try { const d = st.ytPlayer.getDuration() || 0; if (d > 0) { st.ytPlayer.seekTo(r * d, true); const f = document.getElementById(pid + "-fill"); const th = document.getElementById(pid + "-thumb"); const ct = document.getElementById(pid + "-cur"); if (f) f.style.width = (r * 100) + "%"; if (th) th.style.right = ((1 - r) * 100) + "%"; if (ct) ct.textContent = _fmt(r * d); } } catch (x) { }
+}
 
 /* ═══════════════════════════════════════════════════════
-   YT API GLOBAL CALLBACKS
+   YT IFRAME API — global callback
 ═══════════════════════════════════════════════════════ */
 window.ytMusicAPIReady = false;
 window.onYouTubeIframeAPIReady = function () {
     window.ytMusicAPIReady = true;
     if (document.getElementById("main").classList.contains("visible")) initMusicPlayer();
-    (window._lavPending || []).forEach(pid => { const el = document.querySelector(`[data-pid="${pid}"]`); if (el) _mkLavPlayer(pid, el.dataset.ytid, el.dataset.audio === "1"); });
+    (window._lavPending || []).forEach(pid => {
+        const el = document.querySelector(`[data-pid="${pid}"]`);
+        if (el) _mkLavPlayer(pid, el.dataset.ytid);
+    });
     window._lavPending = [];
 };
 
 /* ═══════════════════════════════════════════════════════
-   PLAYLIST  —  reads data/playlist.json
+   MUSIC PLAYER
+   ─ DEFAULT_SONGS always baked in as fallback
+   ─ data/playlist.json can add extra songs on top
 ═══════════════════════════════════════════════════════ */
+const DEFAULT_SONGS = [
+    { title: "Nandemonaiya - movie ver.", ytId: "n89SKAymNfA" },
+    { title: "We'll Be Alright (Movie Edit)", ytId: "VcQIpQB4Fiw" },
+    { title: "Grand Escape (feat. Toko Miura)", ytId: "saDmN2f3HI0" }
+];
+
+// PLAYLIST holds the current play order (may be shuffled)
+// MASTER_LIST holds the original order (used to restore when shuffle off)
 let PLAYLIST = [];
-let musicYT = null, nowPlaying = -1, mpPlaying = false, mpMuted = false, mpRepeat = false, mpShuffle = false, mpSeeking = false, mpTicker = null, musicPanelOpen = false;
+let MASTER_LIST = [];
+
+let musicYT = null;
+let nowPlaying = -1;   // index into PLAYLIST
+let mpPlaying = false;
+let mpMuted = false;
+let mpRepeat = false;
+let mpShuffle = false;
+let mpSeeking = false;
+let mpTicker = null;
+let musicPanelOpen = false;
 
 async function loadPlaylist() {
     try {
         const r = await fetch("data/playlist.json?_=" + Date.now());
         const data = await r.json();
-        PLAYLIST = (data.songs || []);
-        buildPlaylistUI();
-        if (window.ytMusicAPIReady) initMusicPlayer();
-    } catch (e) { PLAYLIST = []; buildPlaylistUI(); }
+        const extra = (data.songs || []).filter(s => !DEFAULT_SONGS.some(d => d.ytId === s.ytId));
+        MASTER_LIST = [...DEFAULT_SONGS, ...extra];
+    } catch (e) {
+        MASTER_LIST = [...DEFAULT_SONGS];
+    }
+    PLAYLIST = [...MASTER_LIST];
+    buildPlaylistUI();
+    if (window.ytMusicAPIReady) initMusicPlayer();
 }
 
 function initMusicPlayer() {
     if (musicYT || !PLAYLIST.length) return;
-    buildPlaylistUI();
     musicYT = new YT.Player("yt-music-iframe", {
-        height: "1", width: "1", videoId: PLAYLIST[0]?.ytId || "",
-        playerVars: { autoplay: 0, controls: 0, disablekb: 1, fs: 0, rel: 0, modestbranding: 1, playsinline: 1, origin: location.origin || "https://localhost" },
+        height: "120", width: "180",          // must be non-zero for API to init
+        videoId: PLAYLIST[0].ytId,
+        playerVars: {
+            autoplay: 0, controls: 0, disablekb: 1,
+            fs: 0, rel: 0, modestbranding: 1,
+            playsinline: 1,
+            origin: location.origin || "https://localhost"
+        },
         events: {
-            onReady: () => _mpTick(),
+            onReady: (event) => {
+                console.log("Music player ready ✓");
+                _mpTick();
+                // Set volume to max so audio is audible
+                try { event.target.setVolume(100); } catch (x) { }
+            },
             onStateChange: e => {
                 const S = YT.PlayerState;
-                if (e.data === S.PLAYING) { mpPlaying = true; _mpPlayIcon(true); _mpUpdDur(); }
-                else if (e.data === S.PAUSED) { mpPlaying = false; _mpPlayIcon(false); }
-                else if (e.data === S.ENDED) {
+                if (e.data === S.PLAYING) {
+                    mpPlaying = true;
+                    _mpPlayIcon(true);
+                    _mpUpdDur();
+                } else if (e.data === S.PAUSED) {
+                    mpPlaying = false;
+                    _mpPlayIcon(false);
+                } else if (e.data === S.ENDED) {
                     mpPlaying = false;
                     _mpPlayIcon(false);
                     if (mpRepeat) {
-                        musicYT.seekTo(0);
-                        setTimeout(() => musicYT.playVideo(), 50);
+                        // replay same song
+                        try { musicYT.seekTo(0); setTimeout(() => musicYT.playVideo(), 50); } catch (x) { }
                     } else {
-                        nextTrack();
+                        _autoNext();
                     }
                 }
             },
-            onError: e => console.warn("Music error:", e.data)
+            onError: e => console.warn("YT music error:", e.data)
         }
     });
 }
+
 function buildPlaylistUI() {
-    const c = document.getElementById("playlist"); if (!c) return; c.innerHTML = "";
-    PLAYLIST.forEach((t, i) => { const d = document.createElement("div"); d.className = "pl-item"; d.id = "trk-" + i; d.innerHTML = `<span class="pl-num">${i + 1}</span><span class="pl-name">${t.title}</span><span class="pl-play">▶</span>`; d.onclick = () => playTrack(i); c.appendChild(d); });
+    const c = document.getElementById("playlist");
+    if (!c) return;
+    c.innerHTML = "";
+    PLAYLIST.forEach((t, i) => {
+        const d = document.createElement("div");
+        d.className = "pl-item" + (i === nowPlaying ? " active" : "");
+        d.id = "trk-" + i;
+        d.innerHTML = `<span class="pl-num">${i + 1}</span><span class="pl-name">${t.title}</span><span class="pl-play">▶</span>`;
+        d.onclick = () => playTrack(i);
+        c.appendChild(d);
+    });
 }
-function playTrack(i) {
-    if (i < 0 || i >= PLAYLIST.length || !musicYT) return;
-    nowPlaying = i;
-    const t = PLAYLIST[i];
+
+/* Play a track immediately on click — no second press needed */
+function playTrack(idx) {
+    if (idx < 0 || idx >= PLAYLIST.length) return;
+    nowPlaying = idx;
+    const t = PLAYLIST[idx];
+
     document.getElementById("np-title").textContent = t.title;
     document.getElementById("np-artist").textContent = "";
     document.getElementById("pill-label").textContent = t.title;
-    document.querySelectorAll(".pl-item").forEach((el, idx) => el.classList.toggle("active", idx === i));
+    document.querySelectorAll(".pl-item").forEach((el, i) => el.classList.toggle("active", i === idx));
+
+    if (!musicYT) return;
     try {
-        musicYT.loadVideoById(t.ytId);
+        musicYT.loadVideoById(t.ytId);   // auto-plays
         mpPlaying = true;
         _mpPlayIcon(true);
-        _mpUpdDur();
-    } catch (e) { console.warn("Play error:", e); }
+    } catch (e) { console.warn("playTrack error:", e); }
 }
+
 function togglePlayPause() {
     if (!musicYT) return;
     if (mpPlaying) {
         musicYT.pauseVideo();
-        mpPlaying = false;
     } else {
-        if (nowPlaying === -1 && PLAYLIST.length) {
+        if (nowPlaying === -1) {
             playTrack(0);
         } else {
-            musicYT.playVideo();
-            mpPlaying = true;
+            try { musicYT.playVideo(); } catch (x) { }
         }
     }
 }
-function prevTrack() { nowPlaying <= 0 ? playTrack(PLAYLIST.length - 1) : playTrack(nowPlaying - 1); }
-function nextTrack() {
-    if (mpShuffle) {
-        const randomIdx = Math.floor(Math.random() * PLAYLIST.length);
-        playTrack(randomIdx);
+
+/* Auto-advance at end (respects shuffle) */
+function _autoNext() {
+    const next = nowPlaying >= PLAYLIST.length - 1 ? 0 : nowPlaying + 1;
+    playTrack(next);
+}
+
+function prevTrack() {
+    let rewind = false;
+    try { rewind = musicYT && (musicYT.getCurrentTime() || 0) > 3; } catch (e) { }
+    if (rewind) {
+        try { musicYT.seekTo(0, true); } catch (x) { }
     } else {
-        nowPlaying >= PLAYLIST.length - 1 ? playTrack(0) : playTrack(nowPlaying + 1);
+        const prev = nowPlaying <= 0 ? PLAYLIST.length - 1 : nowPlaying - 1;
+        playTrack(prev);
     }
 }
-function toggleShuffle() { mpShuffle = !mpShuffle; document.getElementById("mp-shuffle")?.classList.toggle("on", mpShuffle); }
+function nextTrack() { _autoNext(); }
+
+/* ─── SHUFFLE ────────────────────────────────────────
+   ON:  Fisher-Yates shuffle the playlist array,
+        keeping the currently-playing song at index 0
+        so playback isn't disrupted.
+   OFF: Restore MASTER_LIST order, find current song
+        by ytId and update nowPlaying index.
+─────────────────────────────────────────────────────*/
+function toggleShuffle() {
+    mpShuffle = !mpShuffle;
+    document.getElementById("mp-shuffle")?.classList.toggle("on", mpShuffle);
+
+    const currentYtId = nowPlaying >= 0 ? PLAYLIST[nowPlaying]?.ytId : null;
+
+    if (mpShuffle) {
+        // Fisher-Yates shuffle on a copy
+        const arr = [...MASTER_LIST];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        // Move currently-playing song to front so queue feels natural
+        if (currentYtId) {
+            const pos = arr.findIndex(s => s.ytId === currentYtId);
+            if (pos > 0) { const [song] = arr.splice(pos, 1); arr.unshift(song); }
+        }
+        PLAYLIST = arr;
+        nowPlaying = currentYtId ? 0 : -1;
+    } else {
+        // Restore original order
+        PLAYLIST = [...MASTER_LIST];
+        nowPlaying = currentYtId ? PLAYLIST.findIndex(s => s.ytId === currentYtId) : -1;
+    }
+
+    buildPlaylistUI();
+    // Re-highlight current track after rebuild
+    if (nowPlaying >= 0) {
+        document.querySelectorAll(".pl-item")[nowPlaying]?.classList.add("active");
+    }
+}
+
+/* ─── REPEAT ─────────────────────────────────────── */
 function toggleRepeat() {
     mpRepeat = !mpRepeat;
-    const btn = document.getElementById("mp-repeat");
-    if (btn) {
-        btn.classList.toggle("on", mpRepeat);
-        btn.classList.toggle("active", mpRepeat);
-    }
+    document.getElementById("mp-repeat")?.classList.toggle("on", mpRepeat);
 }
-function toggleMute() { if (!musicYT) return; mpMuted = !mpMuted; mpMuted ? musicYT.mute() : musicYT.unMute(); document.getElementById("mp-vol-on").style.display = mpMuted ? "none" : "block"; document.getElementById("mp-vol-off").style.display = mpMuted ? "block" : "none"; }
-function _mpPlayIcon(p) { const a = document.getElementById("mp-play-icon"); const b = document.getElementById("mp-pause-icon"); if (a) a.style.display = p ? "none" : "block"; if (b) b.style.display = p ? "block" : "none"; }
-function _mpUpdDur() { try { const d = musicYT.getDuration() || 0; document.getElementById("mp-duration").textContent = _fmt(d); } catch (x) { } }
-function _mpTick() { if (mpTicker) return; mpTicker = setInterval(() => { if (!musicYT || mpSeeking) return; try { const c = musicYT.getCurrentTime() || 0; const d = musicYT.getDuration() || 0; if (d > 0) { const pct = (c / d) * 100; const f = document.getElementById("mp-progress-fill"); const th = document.getElementById("mp-progress-thumb"); const ce = document.getElementById("mp-current"); const de = document.getElementById("mp-duration"); if (f) f.style.width = pct + "%"; if (th) th.style.right = (100 - pct) + "%"; if (ce) ce.textContent = _fmt(c); if (de) de.textContent = _fmt(d); } } catch (x) { } }, 500); }
+
+function toggleMute() {
+    if (!musicYT) return;
+    mpMuted = !mpMuted;
+    mpMuted ? musicYT.mute() : musicYT.unMute();
+    document.getElementById("mp-vol-on").style.display = mpMuted ? "none" : "block";
+    document.getElementById("mp-vol-off").style.display = mpMuted ? "block" : "none";
+}
+
+function _mpPlayIcon(p) {
+    const a = document.getElementById("mp-play-icon");
+    const b = document.getElementById("mp-pause-icon");
+    if (a) a.style.display = p ? "none" : "block";
+    if (b) b.style.display = p ? "block" : "none";
+}
+function _mpUpdDur() {
+    try {
+        const d = musicYT.getDuration() || 0;
+        const el = document.getElementById("mp-duration");
+        if (el) el.textContent = _fmt(d);
+    } catch (x) { }
+}
+function _mpTick() {
+    if (mpTicker) return;
+    mpTicker = setInterval(() => {
+        if (!musicYT || mpSeeking) return;
+        try {
+            const c = musicYT.getCurrentTime() || 0;
+            const d = musicYT.getDuration() || 0;
+            if (d > 0) {
+                const pct = (c / d) * 100;
+                const f = document.getElementById("mp-progress-fill");
+                const th = document.getElementById("mp-progress-thumb");
+                const ce = document.getElementById("mp-current");
+                const de = document.getElementById("mp-duration");
+                if (f) f.style.width = pct + "%";
+                if (th) th.style.right = (100 - pct) + "%";
+                if (ce) ce.textContent = _fmt(c);
+                if (de) de.textContent = _fmt(d);
+            }
+        } catch (x) { }
+    }, 500);
+}
+
 function toggleMusic() {
     musicPanelOpen = !musicPanelOpen;
     document.getElementById("music-panel").classList.toggle("open", musicPanelOpen);
-    if (musicPanelOpen && nowPlaying === -1 && PLAYLIST.length && musicYT) {
-        playTrack(0);
+    // First open: highlight song 1 but don't auto-play — she chooses
+    if (musicPanelOpen && nowPlaying === -1 && PLAYLIST.length) {
+        nowPlaying = 0;
+        document.getElementById("np-title").textContent = PLAYLIST[0].title;
+        document.querySelectorAll(".pl-item")[0]?.classList.add("active");
+        if (musicYT) { try { musicYT.cueVideoById(PLAYLIST[0].ytId); } catch (x) { } }
     }
 }
 
+/* Seek bar interaction */
 document.addEventListener("DOMContentLoaded", () => {
-    const tr = document.getElementById("mp-progress-track"); if (!tr) return;
-    function mpS(e) { if (!musicYT) return; const rect = tr.getBoundingClientRect(); const cx = e.touches ? e.touches[0].clientX : e.clientX; const r = Math.min(Math.max((cx - rect.left) / rect.width, 0), 1); try { const d = musicYT.getDuration() || 0; if (d > 0) musicYT.seekTo(r * d, true); } catch (x) { } }
-    tr.addEventListener("mousedown", e => { mpSeeking = true; mpS(e); const mm = ev => { if (mpSeeking) mpS(ev); }; const mu = () => { mpSeeking = false; window.removeEventListener("mousemove", mm); window.removeEventListener("mouseup", mu); }; window.addEventListener("mousemove", mm); window.addEventListener("mouseup", mu); });
-    tr.addEventListener("touchstart", e => { mpSeeking = true; mpS(e); }, { passive: true });
-    tr.addEventListener("touchmove", e => { if (mpSeeking) mpS(e); }, { passive: true });
+    const tr = document.getElementById("mp-progress-track");
+    if (!tr) return;
+    function mpSeek(e) {
+        if (!musicYT) return;
+        const rect = tr.getBoundingClientRect();
+        const cx = e.touches ? e.touches[0].clientX : e.clientX;
+        const r = Math.min(Math.max((cx - rect.left) / rect.width, 0), 1);
+        try { const d = musicYT.getDuration() || 0; if (d > 0) musicYT.seekTo(r * d, true); } catch (x) { }
+    }
+    tr.addEventListener("mousedown", e => {
+        mpSeeking = true; mpSeek(e);
+        const mm = ev => { if (mpSeeking) mpSeek(ev); };
+        const mu = () => { mpSeeking = false; window.removeEventListener("mousemove", mm); window.removeEventListener("mouseup", mu); };
+        window.addEventListener("mousemove", mm); window.addEventListener("mouseup", mu);
+    });
+    tr.addEventListener("touchstart", e => { mpSeeking = true; mpSeek(e); }, { passive: true });
+    tr.addEventListener("touchmove", e => { if (mpSeeking) mpSeek(e); }, { passive: true });
     tr.addEventListener("touchend", () => { mpSeeking = false; });
 });
 
-window.addEventListener("scroll", () => { document.getElementById("scroll-top").classList.toggle("show", scrollY > 280); });
+window.addEventListener("scroll", () => {
+    document.getElementById("scroll-top").classList.toggle("show", scrollY > 280);
+});

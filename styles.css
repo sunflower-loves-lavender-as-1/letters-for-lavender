@@ -333,14 +333,14 @@ body {
     border-radius: 10px;
     border: 1.5px solid var(--lav-300);
     box-shadow: 0 4px 24px rgba(139, 99, 217, .18), 0 1px 4px rgba(139, 99, 217, .1);
-    overflow: hidden;
-    cursor: grab;
+    overflow: visible;
+    cursor: default;
     user-select: none;
     touch-action: none;
     -webkit-user-select: none
 }
 
-.env-seal.grabbing {
+.env-seal.ps-peeling {
     cursor: grabbing
 }
 
@@ -349,7 +349,9 @@ body {
     padding: 1.4rem 1.5rem 1rem;
     display: flex;
     align-items: center;
-    gap: 1rem
+    gap: 1rem;
+    position: relative;
+    z-index: 1
 }
 
 .env-icon {
@@ -372,66 +374,11 @@ body {
 }
 
 .env-hint {
-    font-size: .78rem;
-    color: var(--lav-400);
-    text-align: center;
-    padding: .5rem 0 .9rem;
-    font-style: italic;
-    animation: pulseHint 2s ease-in-out infinite
-}
-
-@keyframes pulseHint {
-
-    0%,
-    100% {
-        opacity: .5
-    }
-
-    50% {
-        opacity: 1
-    }
+    display: none !important
 }
 
 .tear-half {
-    position: absolute;
-    left: 0;
-    right: 0;
-    pointer-events: none;
-    display: none
-}
-
-.tear-top {
-    top: 0;
-    background: var(--lav-300);
-    transform-origin: top center;
-    will-change: transform, opacity
-}
-
-.tear-bot {
-    bottom: 0;
-    background: var(--lav-100)
-}
-
-.tear-top::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    right: 0;
-    height: 16px;
-    background: var(--lav-300);
-    clip-path: polygon(0% 100%, 2.5% 0%, 5% 85%, 7.5% 5%, 10% 90%, 12.5% 0%, 15% 80%, 17.5% 10%, 20% 95%, 22.5% 15%, 25% 75%, 27.5% 0%, 30% 90%, 32.5% 20%, 35% 80%, 37.5% 5%, 40% 95%, 42.5% 10%, 45% 85%, 47.5% 0%, 50% 100%, 52.5% 5%, 55% 80%, 57.5% 0%, 60% 90%, 62.5% 20%, 65% 75%, 67.5% 5%, 70% 95%, 72.5% 10%, 75% 85%, 77.5% 0%, 80% 80%, 82.5% 15%, 85% 90%, 87.5% 5%, 90% 85%, 92.5% 20%, 95% 70%, 97.5% 5%, 100% 100%)
-}
-
-.tear-bot::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 0;
-    right: 0;
-    height: 16px;
-    background: var(--lav-100);
-    clip-path: polygon(0% 0%, 2.5% 100%, 5% 15%, 7.5% 95%, 10% 10%, 12.5% 100%, 15% 20%, 17.5% 90%, 20% 5%, 22.5% 85%, 25% 25%, 27.5% 100%, 30% 10%, 32.5% 80%, 35% 20%, 37.5% 95%, 40% 5%, 42.5% 90%, 45% 15%, 47.5% 100%, 50% 0%, 52.5% 95%, 55% 20%, 57.5% 100%, 60% 10%, 62.5% 80%, 65% 25%, 67.5% 95%, 70% 5%, 72.5% 90%, 75% 15%, 77.5% 100%, 80% 20%, 82.5% 85%, 85% 10%, 87.5% 95%, 90% 15%, 92.5% 80%, 95% 30%, 97.5% 95%, 100% 0%)
+    display: none !important
 }
 
 .letter-card {
@@ -1139,6 +1086,9 @@ body {
     }
 }
 
+/* ══════════════════════════════════
+   MUSIC PLAYER
+══════════════════════════════════ */
 #music-player {
     position: fixed;
     bottom: 1.2rem;
@@ -1334,68 +1284,84 @@ body {
     opacity: 1
 }
 
+/* ── Button row — all uniform size ── */
 .mp-btn-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: .2rem
+    gap: .15rem;
 }
 
 .mp-btn {
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--lav-600);
-    padding: .4rem;
-    border-radius: 8px;
+    color: var(--lav-500);
+    /* Uniform 36×36 tap target for all buttons */
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
     transition: color .15s, background .15s;
     display: flex;
     align-items: center;
-    justify-content: center
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
 }
 
 .mp-btn:hover {
-    color: var(--lav-800);
-    background: var(--lav-100)
+    color: var(--lav-700);
+    background: var(--lav-100);
 }
 
 .mp-btn svg {
-    width: 20px;
-    height: 20px;
-    display: block
+    width: 18px;
+    height: 18px;
+    display: block;
 }
 
+/* Play/pause: larger circle */
 .mp-btn.mp-playpause {
     background: var(--lav-500);
     color: white;
-    border-radius: 50%;
-    width: 42px;
-    height: 42px;
-    padding: 0;
-    box-shadow: 0 2px 12px rgba(139, 99, 217, .35);
-    transition: background .15s, transform .1s
+    width: 44px;
+    height: 44px;
+    box-shadow: 0 2px 14px rgba(139, 99, 217, .35);
+    transition: background .15s, transform .1s;
 }
 
 .mp-btn.mp-playpause svg {
     width: 22px;
-    height: 22px
+    height: 22px;
 }
 
 .mp-btn.mp-playpause:hover {
     background: var(--lav-600);
-    transform: scale(1.05)
+    transform: scale(1.06);
 }
 
 .mp-btn.mp-playpause:active {
-    transform: scale(.96)
+    transform: scale(.95);
 }
 
+/* Shuffle & Repeat: active state = colour + dot below (Spotify-style) */
+.mp-btn.mp-shuffle.on,
 .mp-btn.mp-repeat.on {
-    color: var(--lav-500)
+    color: var(--lav-600);
 }
 
-.mp-btn.mp-shuffle.on {
-    color: var(--lav-500)
+.mp-btn.mp-shuffle.on::after,
+.mp-btn.mp-repeat.on::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--lav-500);
 }
 
 .playlist {
@@ -1479,6 +1445,199 @@ body {
     display: none
 }
 
+/* ══════════════════════════════════════════════════════
+   PEEL STRIP
+══════════════════════════════════════════════════════ */
+.env-seal .tear-half {
+    display: none !important;
+}
+
+.env-hint {
+    display: none !important;
+}
+
+.ps-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: var(--lav-200);
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 11px, rgba(196, 180, 244, 0.10) 11px, rgba(196, 180, 244, 0.10) 12px);
+}
+
+.ps-strip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow: visible;
+}
+
+.ps-strip:active {
+    cursor: grabbing;
+}
+
+.ps-perf {
+    height: 5px;
+    flex-shrink: 0;
+    background: repeating-linear-gradient(90deg, transparent 0px, transparent 4px, rgba(255, 255, 255, 0.65) 4px, rgba(255, 255, 255, 0.65) 7px, transparent 7px, transparent 8px);
+    opacity: 0.75;
+}
+
+.ps-perf-top {
+    border-radius: 2px 2px 0 0;
+}
+
+.ps-perf-bot {
+    border-radius: 0 0 2px 2px;
+}
+
+.ps-inner {
+    flex: 1;
+    background: linear-gradient(90deg, var(--lav-700) 0%, var(--lav-600) 50%, var(--lav-500) 100%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.9rem 0 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.ps-inner::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.13), transparent);
+    animation: psSheen 3.5s ease-in-out 1s infinite;
+    pointer-events: none;
+}
+
+@keyframes psSheen {
+    0% {
+        left: -50%;
+        opacity: 0
+    }
+
+    8% {
+        opacity: 1
+    }
+
+    55% {
+        left: 130%;
+        opacity: .5
+    }
+
+    56% {
+        opacity: 0
+    }
+
+    100% {
+        left: 130%;
+        opacity: 0
+    }
+}
+
+.ps-label {
+    font-family: 'Lora', serif;
+    font-size: .68rem;
+    font-style: italic;
+    letter-spacing: .14em;
+    color: rgba(255, 255, 255, .88);
+    white-space: nowrap;
+    pointer-events: none;
+    flex: 1;
+    text-align: center;
+}
+
+.ps-arrows {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    pointer-events: none;
+}
+
+.ps-arrows span {
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-right: 1.5px solid rgba(255, 255, 255, .65);
+    border-top: 1.5px solid rgba(255, 255, 255, .65);
+    transform: rotate(45deg);
+    animation: psArrow 1.4s ease-in-out infinite;
+}
+
+.ps-arrows span:nth-child(1) {
+    animation-delay: 0s;
+    opacity: .35
+}
+
+.ps-arrows span:nth-child(2) {
+    animation-delay: .18s;
+    opacity: .6
+}
+
+.ps-arrows span:nth-child(3) {
+    animation-delay: .36s;
+    opacity: .9
+}
+
+@keyframes psArrow {
+
+    0%,
+    100% {
+        transform: rotate(45deg) translate(0, 0)
+    }
+
+    50% {
+        transform: rotate(45deg) translate(2px, -2px)
+    }
+}
+
+.ps-notch {
+    position: absolute;
+    left: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 26px;
+    background: var(--lav-400);
+    border-radius: 3px 0 0 3px;
+    box-shadow: -2px 1px 5px rgba(62, 34, 120, .28);
+    z-index: 2;
+    pointer-events: auto;
+    cursor: grab;
+}
+
+.ps-notch::before,
+.ps-notch::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    height: 1.5px;
+    background: rgba(255, 255, 255, .45);
+    border-radius: 1px;
+}
+
+.ps-notch::before {
+    top: 7px;
+}
+
+.ps-notch::after {
+    top: 12px;
+}
+
 @media(max-width:420px) {
     .letter-body {
         font-size: .95rem;
@@ -1497,242 +1656,4 @@ body {
         right: .8rem;
         bottom: .8rem
     }
-}
-
-/* ══════════════════════════════════════════════════════
-   PEEL STRIP  —  horizontal left-to-right, clean version
-   No torn piece. Strip clips away left→right on drag.
-   Title is always visible above the strip.
-══════════════════════════════════════════════════════ */
-
-/* Kill old tear-half system */
-.env-seal .tear-half {
-    display: none !important;
-}
-
-.env-hint {
-    display: none !important;
-}
-
-/* Envelope: needs overflow visible for the notch tab */
-.env-seal {
-    overflow: visible;
-    cursor: default;
-}
-
-.env-seal.ps-peeling {
-    cursor: grabbing;
-}
-
-/* env-back always fully visible — title shows at all times */
-.env-back {
-    position: relative;
-    z-index: 1;
-    padding-bottom: 1rem;
-}
-
-/* ── ps-cover: thin overlay above the strip, clips away with it ──
-   Gives a "sealed" look — matches envelope bg.
-   It only covers from strip_Y upward; the title sits above strip_Y
-   so is never obscured. */
-.ps-cover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 0;
-    pointer-events: none;
-    /* Same paper texture as env-back */
-    background: var(--lav-200);
-    background-image: repeating-linear-gradient(0deg,
-            transparent, transparent 11px,
-            rgba(196, 180, 244, 0.10) 11px, rgba(196, 180, 244, 0.10) 12px);
-}
-
-/* ── ps-strip ── */
-.ps-strip {
-    position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 4;
-    display: flex;
-    flex-direction: column;
-    pointer-events: auto;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-    overflow: visible;
-    /* lets notch stick out left */
-}
-
-.ps-strip:active {
-    cursor: grabbing;
-}
-
-/* ── Perforations ── */
-.ps-perf {
-    height: 5px;
-    flex-shrink: 0;
-    background: repeating-linear-gradient(90deg,
-            transparent 0px, transparent 4px,
-            rgba(255, 255, 255, 0.65) 4px, rgba(255, 255, 255, 0.65) 7px,
-            transparent 7px, transparent 8px);
-    opacity: 0.75;
-}
-
-.ps-perf-top {
-    border-radius: 2px 2px 0 0;
-}
-
-.ps-perf-bot {
-    border-radius: 0 0 2px 2px;
-}
-
-/* ── Strip inner band ── */
-.ps-inner {
-    flex: 1;
-    background: linear-gradient(90deg,
-            var(--lav-700) 0%,
-            var(--lav-600) 50%,
-            var(--lav-500) 100%);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0 0.9rem 0 2rem;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Sheen animation */
-.ps-inner::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -50%;
-    width: 30%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.13), transparent);
-    animation: psSheen 3.5s ease-in-out 1s infinite;
-    pointer-events: none;
-}
-
-@keyframes psSheen {
-    0% {
-        left: -50%;
-        opacity: 0;
-    }
-
-    8% {
-        opacity: 1;
-    }
-
-    55% {
-        left: 130%;
-        opacity: 0.5;
-    }
-
-    56% {
-        opacity: 0;
-    }
-
-    100% {
-        left: 130%;
-        opacity: 0;
-    }
-}
-
-/* Label */
-.ps-label {
-    font-family: 'Lora', serif;
-    font-size: 0.68rem;
-    font-style: italic;
-    letter-spacing: 0.14em;
-    color: rgba(255, 255, 255, 0.88);
-    white-space: nowrap;
-    pointer-events: none;
-    flex: 1;
-    text-align: center;
-}
-
-/* Arrows */
-.ps-arrows {
-    display: flex;
-    gap: 2px;
-    align-items: center;
-    pointer-events: none;
-}
-
-.ps-arrows span {
-    display: block;
-    width: 5px;
-    height: 5px;
-    border-right: 1.5px solid rgba(255, 255, 255, 0.65);
-    border-top: 1.5px solid rgba(255, 255, 255, 0.65);
-    transform: rotate(45deg);
-    animation: psArrow 1.4s ease-in-out infinite;
-}
-
-.ps-arrows span:nth-child(1) {
-    animation-delay: 0s;
-    opacity: 0.35;
-}
-
-.ps-arrows span:nth-child(2) {
-    animation-delay: 0.18s;
-    opacity: 0.6;
-}
-
-.ps-arrows span:nth-child(3) {
-    animation-delay: 0.36s;
-    opacity: 0.9;
-}
-
-@keyframes psArrow {
-
-    0%,
-    100% {
-        transform: rotate(45deg) translate(0, 0);
-    }
-
-    50% {
-        transform: rotate(45deg) translate(2px, -2px);
-    }
-}
-
-/* ── Notch — pull tab sticking out left ── */
-.ps-notch {
-    position: absolute;
-    left: -14px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 26px;
-    /* Different color from strip — lighter, clearly "grab here" */
-    background: var(--lav-400);
-    border-radius: 3px 0 0 3px;
-    box-shadow: -2px 1px 5px rgba(62, 34, 120, 0.28);
-    flex-shrink: 0;
-    z-index: 2;
-    pointer-events: auto;
-    cursor: grab;
-}
-
-/* Fingernail grooves on notch */
-.ps-notch::before,
-.ps-notch::after {
-    content: '';
-    position: absolute;
-    left: 3px;
-    right: 3px;
-    height: 1.5px;
-    background: rgba(255, 255, 255, 0.45);
-    border-radius: 1px;
-}
-
-.ps-notch::before {
-    top: 7px;
-}
-
-.ps-notch::after {
-    top: 12px;
 }

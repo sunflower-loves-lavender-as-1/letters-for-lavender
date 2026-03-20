@@ -72,9 +72,15 @@
         </div>
     </div>
 
-    <!-- HIDDEN MUSIC YT HOST -->
+    <!--
+  HIDDEN YT PLAYER FOR MUSIC
+  Key: position:absolute, NOT overflow:hidden, NOT opacity:0
+  Must be 1×1px and off-screen but NOT visually clipped.
+  YouTube IFrame API refuses to fire onReady when clipped/hidden.
+  translate(-9999px) moves it off-screen without clipping it.
+-->
     <div id="yt-music-host"
-        style="position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;bottom:0;left:0;overflow:hidden;z-index:-1">
+        style="position:fixed;width:1px;height:1px;bottom:0;left:0;transform:translate(-9999px,-9999px);pointer-events:none;z-index:-1;">
         <div id="yt-music-iframe"></div>
     </div>
 
@@ -100,12 +106,46 @@
                     <span class="mp-time" id="mp-duration">0:00</span>
                 </div>
                 <div class="mp-btn-row">
+
+                    <!-- SHUFFLE — two crossing arrows -->
                     <button class="mp-btn mp-shuffle" id="mp-shuffle" onclick="toggleShuffle()" title="Shuffle">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-4H3v4h8v2h8zm7.25-13.5L21 7.75V3h-2v2.75L15.5 3l-1.5 1.5L17.5 7l-3.5 3.5 1.5 1.5L21 8.25V11h2V5.75l3.25 3.25L27 8.5 23.5 5.75l3.5-3.5L27 2.75l-3.75 3.75h-2.75V0h-2v5.75z" />
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 3 21 3 21 8" />
+                            <line x1="4" y1="20" x2="21" y2="3" />
+                            <polyline points="21 16 21 21 16 21" />
+                            <line x1="15" y1="15" x2="21" y2="21" />
                         </svg>
                     </button>
+
+                    <!-- PREV — bar + left triangle -->
+                    <button class="mp-btn mp-prev" onclick="prevTrack()" title="Previous">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="5" y="5" width="2" height="14" rx="1" />
+                            <polygon points="18,5 9,12 18,19" />
+                        </svg>
+                    </button>
+
+                    <!-- PLAY / PAUSE -->
+                    <button class="mp-btn mp-playpause" id="mp-playpause" onclick="togglePlayPause()">
+                        <svg id="mp-play-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="6,3 20,12 6,21" />
+                        </svg>
+                        <svg id="mp-pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+                            <rect x="5" y="3" width="4" height="18" rx="1" />
+                            <rect x="15" y="3" width="4" height="18" rx="1" />
+                        </svg>
+                    </button>
+
+                    <!-- NEXT — right triangle + bar -->
+                    <button class="mp-btn mp-next" onclick="nextTrack()" title="Next">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="6,5 15,12 6,19" />
+                            <rect x="17" y="5" width="2" height="14" rx="1" />
+                        </svg>
+                    </button>
+
+                    <!-- REPEAT — circular arrows -->
                     <button class="mp-btn mp-repeat" id="mp-repeat" onclick="toggleRepeat()" title="Repeat">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -115,25 +155,9 @@
                             <path d="M21 13v2a4 4 0 0 1-4 4H3" />
                         </svg>
                     </button>
-                    <button class="mp-btn mp-prev" onclick="prevTrack()" title="Previous">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
-                        </svg>
-                    </button>
-                    <button class="mp-btn mp-playpause" id="mp-playpause" onclick="togglePlayPause()">
-                        <svg id="mp-play-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M8 5v14l11-7z" />
-                        </svg>
-                        <svg id="mp-pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none">
-                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                        </svg>
-                    </button>
-                    <button class="mp-btn mp-next" onclick="nextTrack()" title="Next">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M4 18l12-6-12-6v12zm13-6v6h2V6h-2v6z" />
-                        </svg>
-                    </button>
-                    <button class="mp-btn mp-vol" onclick="toggleMute()">
+
+                    <!-- MUTE -->
+                    <button class="mp-btn mp-vol" onclick="toggleMute()" title="Mute">
                         <svg id="mp-vol-on" viewBox="0 0 24 24" fill="currentColor">
                             <path
                                 d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
@@ -143,10 +167,12 @@
                                 d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
                         </svg>
                     </button>
+
                 </div>
             </div>
             <div class="playlist" id="playlist"></div>
         </div>
+
         <button class="music-pill" onclick="toggleMusic()">
             <span class="note-icon">🎵</span>
             <span id="pill-label">Her Playlist</span>
