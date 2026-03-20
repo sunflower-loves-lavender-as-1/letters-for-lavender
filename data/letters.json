@@ -8,17 +8,17 @@
         "icon": "🌸",
         "title": "Hello",
         "subtitle": "Just thinking of you today…",
-        "color": "#ddd4f9",
-        "borderColor": "#b5acd1"
+        "color": "#e8f5e9",
+        "borderColor": "#c0cdc1"
       },
       "style": {
         "font": "Dancing Script",
-        "accentColor": "#6e42bd",
-        "titleColor": "#6e42bd",
-        "bodyColor": "#3d2d5e",
-        "headerGradientFrom": "#fbf2ff",
-        "headerGradientTo": "#ddd4f9",
-        "tearColor": "#ddd4f9"
+        "accentColor": "#bf3bae",
+        "titleColor": "#bf3bae",
+        "bodyColor": "#f273db",
+        "headerGradientFrom": "#ffffff",
+        "headerGradientTo": "#e8f5e9",
+        "tearColor": "#e8f5e9"
       },
       "content": {
         "date": "auto",
@@ -65,17 +65,17 @@
         "icon": "❤️",
         "title": "Somewhere Between Us",
         "subtitle": "Not just friends… not quite lovers… but something that feels right",
-        "color": "#fce4ec",
-        "borderColor": "#d4bcc4"
+        "color": "#e8f5e9",
+        "borderColor": "#c0cdc1"
       },
       "style": {
-        "font": "Great Vibes",
+        "font": "Dancing Script",
         "accentColor": "#bf3bae",
         "titleColor": "#bf3bae",
         "bodyColor": "#f273db",
         "headerGradientFrom": "#ffffff",
-        "headerGradientTo": "#fce4ec",
-        "tearColor": "#fce4ec"
+        "headerGradientTo": "#e8f5e9",
+        "tearColor": "#e8f5e9"
       },
       "content": {
         "date": "auto",
@@ -126,7 +126,7 @@
         "borderColor": "#c0cdc1"
       },
       "style": {
-        "font": "Great Vibes",
+        "font": "Dancing Script",
         "accentColor": "#bf3bae",
         "titleColor": "#bf3bae",
         "bodyColor": "#f273db",
