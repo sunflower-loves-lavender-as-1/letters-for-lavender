@@ -482,7 +482,7 @@ window.onYouTubeIframeAPIReady = function () {
    PLAYLIST  —  reads data/playlist.json
 ═══════════════════════════════════════════════════════ */
 let PLAYLIST = [];
-let musicYT = null, nowPlaying = -1, mpPlaying = false, mpMuted = false, mpRepeat = false, mpSeeking = false, mpTicker = null, musicPanelOpen = false;
+let musicYT = null, nowPlaying = -1, mpPlaying = false, mpMuted = false, mpRepeat = false, mpShuffle = false, mpSeeking = false, mpTicker = null, musicPanelOpen = false;
 
 async function loadPlaylist() {
     try {
@@ -506,7 +506,16 @@ function initMusicPlayer() {
                 const S = YT.PlayerState;
                 if (e.data === S.PLAYING) { mpPlaying = true; _mpPlayIcon(true); _mpUpdDur(); }
                 else if (e.data === S.PAUSED) { mpPlaying = false; _mpPlayIcon(false); }
-                else if (e.data === S.ENDED) { mpPlaying = false; _mpPlayIcon(false); mpRepeat ? (musicYT.seekTo(0), musicYT.playVideo()) : nextTrack(); }
+                else if (e.data === S.ENDED) {
+                    mpPlaying = false;
+                    _mpPlayIcon(false);
+                    if (mpRepeat) {
+                        musicYT.seekTo(0);
+                        setTimeout(() => musicYT.playVideo(), 50);
+                    } else {
+                        nextTrack();
+                    }
+                }
             },
             onError: e => console.warn("Music error:", e.data)
         }
@@ -525,21 +534,44 @@ function playTrack(i) {
     document.getElementById("pill-label").textContent = t.title;
     document.querySelectorAll(".pl-item").forEach((el, idx) => el.classList.toggle("active", idx === i));
     try {
-        musicYT.cueVideoById(t.ytId);
-        setTimeout(() => {
-            try {
-                musicYT.playVideo();
-                mpPlaying = true;
-                _mpPlayIcon(true);
-                _mpUpdDur();
-            } catch (e) { console.warn("Play error:", e); }
-        }, 100);
-    } catch (e) { console.warn("Cue error:", e); }
+        musicYT.loadVideoById(t.ytId);
+        mpPlaying = true;
+        _mpPlayIcon(true);
+        _mpUpdDur();
+    } catch (e) { console.warn("Play error:", e); }
 }
-function togglePlayPause() { if (!musicYT) return; mpPlaying ? musicYT.pauseVideo() : (nowPlaying === -1 && PLAYLIST.length ? playTrack(0) : musicYT.playVideo()); }
+function togglePlayPause() {
+    if (!musicYT) return;
+    if (mpPlaying) {
+        musicYT.pauseVideo();
+        mpPlaying = false;
+    } else {
+        if (nowPlaying === -1 && PLAYLIST.length) {
+            playTrack(0);
+        } else {
+            musicYT.playVideo();
+            mpPlaying = true;
+        }
+    }
+}
 function prevTrack() { nowPlaying <= 0 ? playTrack(PLAYLIST.length - 1) : playTrack(nowPlaying - 1); }
-function nextTrack() { nowPlaying >= PLAYLIST.length - 1 ? playTrack(0) : playTrack(nowPlaying + 1); }
-function toggleRepeat() { mpRepeat = !mpRepeat; document.getElementById("mp-repeat")?.classList.toggle("on", mpRepeat); }
+function nextTrack() {
+    if (mpShuffle) {
+        const randomIdx = Math.floor(Math.random() * PLAYLIST.length);
+        playTrack(randomIdx);
+    } else {
+        nowPlaying >= PLAYLIST.length - 1 ? playTrack(0) : playTrack(nowPlaying + 1);
+    }
+}
+function toggleShuffle() { mpShuffle = !mpShuffle; document.getElementById("mp-shuffle")?.classList.toggle("on", mpShuffle); }
+function toggleRepeat() {
+    mpRepeat = !mpRepeat;
+    const btn = document.getElementById("mp-repeat");
+    if (btn) {
+        btn.classList.toggle("on", mpRepeat);
+        btn.classList.toggle("active", mpRepeat);
+    }
+}
 function toggleMute() { if (!musicYT) return; mpMuted = !mpMuted; mpMuted ? musicYT.mute() : musicYT.unMute(); document.getElementById("mp-vol-on").style.display = mpMuted ? "none" : "block"; document.getElementById("mp-vol-off").style.display = mpMuted ? "block" : "none"; }
 function _mpPlayIcon(p) { const a = document.getElementById("mp-play-icon"); const b = document.getElementById("mp-pause-icon"); if (a) a.style.display = p ? "none" : "block"; if (b) b.style.display = p ? "block" : "none"; }
 function _mpUpdDur() { try { const d = musicYT.getDuration() || 0; document.getElementById("mp-duration").textContent = _fmt(d); } catch (x) { } }

@@ -100,6 +100,12 @@
                     <span class="mp-time" id="mp-duration">0:00</span>
                 </div>
                 <div class="mp-btn-row">
+                    <button class="mp-btn mp-shuffle" id="mp-shuffle" onclick="toggleShuffle()" title="Shuffle">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-4H3v4h8v2h8zm7.25-13.5L21 7.75V3h-2v2.75L15.5 3l-1.5 1.5L17.5 7l-3.5 3.5 1.5 1.5L21 8.25V11h2V5.75l3.25 3.25L27 8.5 23.5 5.75l3.5-3.5L27 2.75l-3.75 3.75h-2.75V0h-2v5.75z" />
+                        </svg>
+                    </button>
                     <button class="mp-btn mp-repeat" id="mp-repeat" onclick="toggleRepeat()" title="Repeat">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
@@ -124,7 +130,7 @@
                     </button>
                     <button class="mp-btn mp-next" onclick="nextTrack()" title="Next">
                         <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M6 18l8.5-6L6 6v12zm2.5-6 8.5 6V6z" />
+                            <path d="M4 18l12-6-12-6v12zm13-6v6h2V6h-2v6z" />
                         </svg>
                     </button>
                     <button class="mp-btn mp-vol" onclick="toggleMute()">

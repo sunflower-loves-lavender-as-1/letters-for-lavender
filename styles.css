@@ -1394,6 +1394,10 @@ body {
     color: var(--lav-500)
 }
 
+.mp-btn.mp-shuffle.on {
+    color: var(--lav-500)
+}
+
 .playlist {
     overflow-y: auto;
     max-height: 180px;
