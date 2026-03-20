@@ -1166,6 +1166,31 @@ body {
     justify-content: space-between
 }
 
+.mp-header-actions {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.mp-refresh-btn,
+.mp-close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: white;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0.2rem 0.44rem;
+    border-radius: 4px;
+    opacity: 0.85;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+.mp-refresh-btn:hover,
+.mp-close-btn:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
 .music-panel-hdr h3 {
     font-family: 'Dancing Script', cursive;
     font-size: 1.25rem

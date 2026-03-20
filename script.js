@@ -427,7 +427,12 @@ function _lavSeekMove(e, pid) {
 window.ytMusicAPIReady = false;
 window.onYouTubeIframeAPIReady = function () {
     window.ytMusicAPIReady = true;
+    console.log("YouTube IFrame API ready: true");
     if (document.getElementById("main").classList.contains("visible")) initMusicPlayer();
+    if (!musicYT && PLAYLIST.length) {
+        console.log("Playlist already loaded while API became ready → initializing music player");
+        initMusicPlayer();
+    }
     (window._lavPending || []).forEach(pid => {
         const el = document.querySelector(`[data-pid="${pid}"]`);
         if (el) _mkLavPlayer(pid, el.dataset.ytid);
@@ -466,14 +471,15 @@ async function loadPlaylist() {
     }
     PLAYLIST = [...MASTER_LIST];
     buildPlaylistUI();
-    console.log("Playlist loaded:", PLAYLIST.length, "songs, API ready:", window.ytMusicAPIReady);
+    const apiState = window.ytMusicAPIReady ? "true" : "false (waiting for API callback)";
+    console.log("Playlist loaded:", PLAYLIST.length, "songs, API ready:", apiState);
 
     // Initialize music player when API is ready
     if (window.ytMusicAPIReady && !musicYT && PLAYLIST.length) {
         console.log("Initializing music player now...");
         initMusicPlayer();
     } else if (PLAYLIST.length && !window.ytMusicAPIReady) {
-        // API might load later, try again after delay
+        // API might load later; next API callback does init, but also retry once
         setTimeout(() => {
             if (window.ytMusicAPIReady && !musicYT) {
                 console.log("Initializing music player (delayed)...");
@@ -711,6 +717,44 @@ function toggleMusic() {
         document.querySelectorAll(".pl-item")[0]?.classList.add("active");
         if (musicYT) { try { musicYT.cueVideoById(PLAYLIST[0].ytId); } catch (x) { } }
     }
+}
+
+function refreshMusicAPI() {
+    console.log("Refresh requested: YouTube IFrame API and music player");
+
+    if (window.ytMusicAPIReady && musicYT) {
+        console.log("API already ready; reloading current track if available");
+        if (nowPlaying >= 0 && PLAYLIST[nowPlaying]) {
+            try { musicYT.cueVideoById(PLAYLIST[nowPlaying].ytId); } catch (x) { }
+        }
+        return;
+    }
+
+    window.ytMusicAPIReady = false;
+    if (musicYT) {
+        try { musicYT.destroy(); } catch (x) { }
+        musicYT = null;
+    }
+
+    // Remove / reload the YouTube API script
+    const existing = document.querySelector('script[src="https://www.youtube.com/iframe_api"]');
+    if (existing) existing.remove();
+    const script = document.createElement("script");
+    script.src = "https://www.youtube.com/iframe_api";
+    script.async = true;
+    script.onload = () => console.log("YouTube IFrame API script reloaded");
+    script.onerror = () => console.warn("YouTube IFrame API script reload failed");
+    document.body.appendChild(script);
+
+    // If playlist is already here, attempt init after a small delay
+    setTimeout(() => {
+        if (window.ytMusicAPIReady && !musicYT && PLAYLIST.length) {
+            console.log("API is now ready after refresh, initializing player");
+            initMusicPlayer();
+        } else {
+            console.log("API still not ready after refresh (this is okay if network is slow)");
+        }
+    }, 600);
 }
 
 /* Seek bar interaction */

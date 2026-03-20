@@ -24,22 +24,22 @@
         <span class="lock-decor" style="top:35%;left:3%;animation-delay:1.5s">🪻</span>
         <span class="lock-decor" style="top:45%;right:3%;animation-delay:2.5s">🌷</span>
         <div class="lock-flower">🪻</div>
-        <h1 class="lock-title">This is just for you</h1>
-        <p class="lock-sub">Enter the secret to step inside ✨</p>
+        <h1 class="lock-title">As Requested</h1>
+        <p class="lock-sub">Do you remember what I asked you to ?✨</p>
         <div class="lock-input-wrap">
             <input type="password" class="lock-input" id="pw-input" placeholder="Your secret key…" autocomplete="off"
                 autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')tryUnlock()">
             <button class="eye-btn" onclick="toggleEye()" aria-label="Show/hide">👁</button>
         </div>
-        <button class="unlock-btn" onclick="tryUnlock()">Open with Love 💜</button>
-        <p class="lock-error-msg" id="lock-err">That doesn't seem right… try again 🥺</p>
+        <button class="unlock-btn" onclick="tryUnlock()">Open</button>
+        <p class="lock-error-msg" id="lock-err">Might have forgotten it… Try again🥺</p>
     </div>
 
     <!-- MAIN -->
     <div id="main">
         <header class="site-header">
-            <h1>For You, Always 🪻</h1>
-            <p>a little world built just for you</p>
+            <h1>Letters for Lavender...🪻</h1>
+            <p>You wanted letter right ?</p>
         </header>
         <nav class="nav-tabs">
             <button class="nav-tab active" onclick="switchTab('letters',0)">💌 Letters</button>
@@ -89,7 +89,10 @@
         <div class="music-panel" id="music-panel">
             <div class="music-panel-hdr">
                 <h3>🎵 Her Playlist</h3>
-                <button onclick="toggleMusic()" class="mp-close-btn">✕</button>
+                <div class="mp-header-actions">
+                    <button onclick="refreshMusicAPI()" class="mp-refresh-btn" title="Refresh YouTube API">↻</button>
+                    <button onclick="toggleMusic()" class="mp-close-btn">✕</button>
+                </div>
             </div>
             <div class="now-playing">
                 <p class="np-label">Now Playing</p>
