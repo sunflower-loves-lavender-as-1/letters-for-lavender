@@ -436,23 +436,17 @@ window.onYouTubeIframeAPIReady = function () {
 };
 
 /* ═══════════════════════════════════════════════════════
-   MUSIC PLAYER
-   ─ DEFAULT_SONGS always baked in as fallback
-   ─ data/playlist.json can add extra songs on top
+   MUSIC PLAYER  —  reads entirely from data/playlist.json
+   Add / remove songs only via the backend or JSON file.
 ═══════════════════════════════════════════════════════ */
-const DEFAULT_SONGS = [
-    { title: "Nandemonaiya - movie ver.", ytId: "n89SKAymNfA" },
-    { title: "We'll Be Alright (Movie Edit)", ytId: "VcQIpQB4Fiw" },
-    { title: "Grand Escape (feat. Toko Miura)", ytId: "saDmN2f3HI0" }
-];
 
-// PLAYLIST holds the current play order (may be shuffled)
-// MASTER_LIST holds the original order (used to restore when shuffle off)
+// PLAYLIST = current play order (may be shuffled)
+// MASTER_LIST = original order from JSON (used to restore when shuffle off)
 let PLAYLIST = [];
 let MASTER_LIST = [];
 
 let musicYT = null;
-let nowPlaying = -1;   // index into PLAYLIST
+let nowPlaying = -1;
 let mpPlaying = false;
 let mpMuted = false;
 let mpRepeat = false;
@@ -465,14 +459,28 @@ async function loadPlaylist() {
     try {
         const r = await fetch("data/playlist.json?_=" + Date.now());
         const data = await r.json();
-        const extra = (data.songs || []).filter(s => !DEFAULT_SONGS.some(d => d.ytId === s.ytId));
-        MASTER_LIST = [...DEFAULT_SONGS, ...extra];
+        MASTER_LIST = (data.songs || []);
     } catch (e) {
-        MASTER_LIST = [...DEFAULT_SONGS];
+        MASTER_LIST = [];
+        console.warn("Could not load playlist.json:", e);
     }
     PLAYLIST = [...MASTER_LIST];
     buildPlaylistUI();
-    if (window.ytMusicAPIReady) initMusicPlayer();
+    console.log("Playlist loaded:", PLAYLIST.length, "songs, API ready:", window.ytMusicAPIReady);
+
+    // Initialize music player when API is ready
+    if (window.ytMusicAPIReady && !musicYT && PLAYLIST.length) {
+        console.log("Initializing music player now...");
+        initMusicPlayer();
+    } else if (PLAYLIST.length && !window.ytMusicAPIReady) {
+        // API might load later, try again after delay
+        setTimeout(() => {
+            if (window.ytMusicAPIReady && !musicYT) {
+                console.log("Initializing music player (delayed)...");
+                initMusicPlayer();
+            }
+        }, 500);
+    }
 }
 
 function initMusicPlayer() {
@@ -535,19 +543,37 @@ function buildPlaylistUI() {
 /* Play a track immediately on click — no second press needed */
 function playTrack(idx) {
     if (idx < 0 || idx >= PLAYLIST.length) return;
+    if (!musicYT) {
+        console.warn("musicYT not initialized yet");
+        return;
+    }
+
     nowPlaying = idx;
     const t = PLAYLIST[idx];
+    console.log("Playing track:", idx, t.title, "ytId:", t.ytId);
 
     document.getElementById("np-title").textContent = t.title;
     document.getElementById("np-artist").textContent = "";
     document.getElementById("pill-label").textContent = t.title;
     document.querySelectorAll(".pl-item").forEach((el, i) => el.classList.toggle("active", i === idx));
 
-    if (!musicYT) return;
     try {
-        musicYT.loadVideoById(t.ytId);   // auto-plays
-        mpPlaying = true;
-        _mpPlayIcon(true);
+        // Stop any current playback, then cue and play
+        musicYT.stopVideo();
+        setTimeout(() => {
+            try {
+                musicYT.cueVideoById(t.ytId);
+                setTimeout(() => {
+                    try {
+                        musicYT.playVideo();
+                        mpPlaying = true;
+                        _mpPlayIcon(true);
+                        _mpUpdDur();
+                        console.log("Playing now");
+                    } catch (e) { console.warn("playVideo error:", e); }
+                }, 200);
+            } catch (e) { console.warn("cueVideoById error:", e); }
+        }, 100);
     } catch (e) { console.warn("playTrack error:", e); }
 }
 
@@ -625,7 +651,11 @@ function toggleShuffle() {
 /* ─── REPEAT ─────────────────────────────────────── */
 function toggleRepeat() {
     mpRepeat = !mpRepeat;
-    document.getElementById("mp-repeat")?.classList.toggle("on", mpRepeat);
+    const btn = document.getElementById("mp-repeat");
+    if (btn) {
+        btn.classList.toggle("on", mpRepeat);
+    }
+    console.log("Repeat:", mpRepeat ? "ON" : "OFF");
 }
 
 function toggleMute() {
