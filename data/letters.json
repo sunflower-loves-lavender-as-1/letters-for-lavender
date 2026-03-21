@@ -8,17 +8,17 @@
         "icon": "🌸",
         "title": "A Sweet Hello",
         "subtitle": "(just checking if the website logic works)",
-        "color": "#e3f2fd",
-        "borderColor": "#bbcad5"
+        "color": "#ddd4f9",
+        "borderColor": "#b5acd1"
       },
       "style": {
         "font": "Dancing Script",
         "accentColor": "#c2185b",
         "titleColor": "#c2185b",
         "bodyColor": "#3983b1",
-        "headerGradientFrom": "#ffffff",
-        "headerGradientTo": "#e3f2fd",
-        "tearColor": "#e3f2fd"
+        "headerGradientFrom": "#fbf2ff",
+        "headerGradientTo": "#ddd4f9",
+        "tearColor": "#ddd4f9"
       },
       "content": {
         "date": "auto",
