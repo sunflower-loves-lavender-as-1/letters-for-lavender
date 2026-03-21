@@ -666,27 +666,6 @@
             background: var(--lav-50)
         }
 
-        .letter-list-item.dragging {
-            opacity: 0.5;
-            background: var(--lav-100)
-        }
-
-        .letter-list-item.drag-over {
-            border-top: 3px solid var(--lav-500);
-            padding-top: calc(0.8rem - 3px)
-        }
-
-        .lli-drag {
-            color: var(--lav-300);
-            cursor: grab;
-            font-size: 1.2rem;
-            flex-shrink: 0
-        }
-
-        .letter-list-item:active .lli-drag {
-            cursor: grabbing
-        }
-
         .lli-num {
             font-family: 'Dancing Script', cursive;
             font-size: 1.3rem;
@@ -1475,17 +1454,9 @@
         function renderLettersList() {
             const el = document.getElementById("be-letters-list"); el.innerHTML = "";
             beData.letters.forEach((l, i) => {
-                const d = document.createElement("div");
-                d.className = "letter-list-item" + (beEditingLetter?.id === l.id ? " active-edit" : "");
-                d.draggable = true;
-                d.dataset.letterId = l.id;
-                d.dataset.letterIndex = i;
-                d.innerHTML = `<span class="lli-drag">⋮⋮</span><span class="lli-num">No.${l.number || i + 1}</span><div class="lli-info"><div class="lli-title">${l.envelope?.title || l.content?.title || "Letter"}</div><div class="lli-sub">Template: ${l.template || "classic"}</div></div><button class="lli-del" onclick="beDeleteLetter('${l.id}',event)" title="Delete">🗑</button>`;
+                const d = document.createElement("div"); d.className = "letter-list-item" + (beEditingLetter?.id === l.id ? " active-edit" : "");
+                d.innerHTML = `<span class="lli-num">No.${l.number || i + 1}</span><div class="lli-info"><div class="lli-title">${l.envelope?.title || l.content?.title || "Letter"}</div><div class="lli-sub">Template: ${l.template || "classic"}</div></div><button class="lli-del" onclick="beDeleteLetter('${l.id}',event)" title="Delete">🗑</button>`;
                 d.querySelector(".lli-info").addEventListener("click", () => beEditLetter(l));
-                d.addEventListener("dragstart", beLetterDragStart);
-                d.addEventListener("dragover", beLetterDragOver);
-                d.addEventListener("drop", beLetterDrop);
-                d.addEventListener("dragend", beLetterDragEnd);
                 el.appendChild(d);
             });
         }
@@ -1496,40 +1467,6 @@
             beData.letters.push(newL);
             beEditLetter(newL);
             renderLettersList();
-        }
-
-        /* ─── LETTER DRAG & DROP ─── */
-        let draggedLetterIndex = null;
-        function beLetterDragStart(e) {
-            draggedLetterIndex = parseInt(e.target.dataset.letterIndex);
-            e.target.classList.add("dragging");
-            e.dataTransfer.effectAllowed = "move";
-        }
-        function beLetterDragOver(e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = "move";
-            const item = e.target.closest(".letter-list-item");
-            if (item && draggedLetterIndex !== null) {
-                item.classList.add("drag-over");
-            }
-        }
-        function beLetterDrop(e) {
-            e.preventDefault();
-            const targetItem = e.target.closest(".letter-list-item");
-            if (!targetItem || draggedLetterIndex === null) return;
-            const targetIndex = parseInt(targetItem.dataset.letterIndex);
-            if (targetIndex !== draggedLetterIndex) {
-                const [moved] = beData.letters.splice(draggedLetterIndex, 1);
-                beData.letters.splice(targetIndex, 0, moved);
-                beData.letters.forEach((l, i) => { l.number = i + 1; });
-                renderLettersList();
-                bePushFile("data/letters.json", { letters: beData.letters }, "Reorder letters");
-            }
-        }
-        function beLetterDragEnd(e) {
-            e.target.classList.remove("dragging");
-            document.querySelectorAll(".letter-list-item").forEach(item => item.classList.remove("drag-over"));
-            draggedLetterIndex = null;
         }
 
         function beEditLetter(letter) {
@@ -1586,21 +1523,6 @@
             document.getElementById("para-list").appendChild(wrap);
         }
         function beAddPara() { _addParaEl(""); }
-
-        function _selectSwatch(rowId, color) {
-            const row = document.getElementById(rowId);
-            if (!row) return;
-            row.querySelectorAll(".color-swatch-btn").forEach(btn => {
-                btn.classList.remove("selected");
-                if (btn.dataset.color === color) {
-                    btn.classList.add("selected");
-                }
-            });
-            const customInput = row.querySelector("input[type='color']");
-            if (customInput && !row.querySelector(".color-swatch-btn.selected")) {
-                customInput.value = color;
-            }
-        }
 
         function _renderPills(containerId, arr, group) {
             const c = document.getElementById(containerId); c.innerHTML = "";

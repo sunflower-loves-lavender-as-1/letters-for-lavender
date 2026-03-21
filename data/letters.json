@@ -1,175 +1,60 @@
 {
-  "letters": [
-    {
-      "id": "letter-1",
-      "number": 1,
-      "template": "classic",
-      "envelope": {
-        "icon": "🌸",
-        "title": "Hello",
-        "subtitle": "Just thinking of you today…",
-        "color": "#e8f5e9",
-        "borderColor": "#c0cdc1"
-      },
-      "style": {
-        "font": "Dancing Script",
-        "accentColor": "#bf3bae",
-        "titleColor": "#bf3bae",
-        "bodyColor": "#f273db",
-        "headerGradientFrom": "#ffffff",
-        "headerGradientTo": "#e8f5e9",
-        "tearColor": "#e8f5e9"
-      },
-      "content": {
-        "date": "auto",
-        "title": "Hellooooooo",
-        "salutation": "Hi Lavender 🪻",
-        "paragraphs": [
-          "It's me Sunflower 🌻",
-          "I don't know if you realize how often that happens. How a random song, a colour, a quiet moment in the evening, will quietly remind me that you exist and that somehow makes everything feel a little warmer.",
-          "I know lavender is your colour, and honestly, I think that suits you perfectly  gentle, beautiful, and with a kind of quiet magic that stays with you long after you've stopped looking. 💜",
-          "I'm not writing this because I need an answer to anything. I'm writing this because you deserve to know on a completely ordinary day that someone out here thinks the world is a much better place just because *you're* in it. 🌟",
-          "No pressure, no rush, no expectations. Just a small note to say: *hello, I'm thinking of you, and I hope your day has at least one moment that makes you smile.* 🌸",
-          "I Hope you smile when you read this letter :)"
-        ],
-        "signOff": "Pouring Love",
-        "name": "- Sunflower 🌻",
-        "decorations": {
-          "topFlowers": [
-            "🪻",
-            "💜",
-            "🌿",
-            "🌸",
-            "✨"
-          ],
-          "bottomFlowers": [
-            "🌷",
-            "🪻",
-            "🌷"
-          ],
-          "cornerFlowers": [
-            "🌸",
-            "🪻",
-            "✨",
-            "💜"
-          ],
-          "dividerFlower": "🪻"
+    "letters": [
+        {
+            "id": "letter-1",
+            "number": 1,
+            "template": "classic",
+            "envelope": {
+                "color": "#ddd4f9",
+                "borderColor": "#c4b4f4",
+                "icon": "🌸",
+                "title": "A Sweet Hello",
+                "subtitle": "Just thinking of you today…"
+            },
+            "style": {
+                "headerGradientFrom": "#f0ebff",
+                "headerGradientTo": "#ddd4f9",
+                "accentColor": "#6e42bd",
+                "titleColor": "#5530a0",
+                "bodyColor": "#3d2d5e",
+                "font": "Dancing Script",
+                "tearColor": "#c4b4f4"
+            },
+            "content": {
+                "date": "auto",
+                "title": "A Sweet Hello 🌷",
+                "salutation": "Hey, you 🌷",
+                "paragraphs": [
+                    "I was just sitting here, doing absolutely nothing important, and somehow — as always — my mind wandered straight to you. 💭",
+                    "I don't know if you realize how often that happens. How a random song, a colour, a quiet moment in the evening, will quietly remind me that you exist — and that somehow makes everything feel a little warmer. 🌙",
+                    "I know lavender is your colour, and honestly, I think that suits you perfectly — gentle, beautiful, and with a kind of quiet magic that stays with you long after you've stopped looking. 💜",
+                    "I'm not writing this because I need an answer to anything. I'm writing this because you deserve to know — on a completely ordinary day — that someone out here thinks the world is a much better place just because *you're* in it. 🌟",
+                    "No pressure, no rush, no expectations. Just a small note to say: *hello, I'm thinking of you, and I hope your day has at least one moment that makes you smile.* 🌸"
+                ],
+                "signOff": "With a gentle heart,",
+                "name": "— Your Admirer 💜",
+                "decorations": {
+                    "topFlowers": [
+                        "🪻",
+                        "💜",
+                        "🌿",
+                        "🌸",
+                        "✨"
+                    ],
+                    "bottomFlowers": [
+                        "🌷",
+                        "🪻",
+                        "🌷"
+                    ],
+                    "dividerFlower": "🪻",
+                    "cornerFlowers": [
+                        "🌸",
+                        "🪻",
+                        "✨",
+                        "💜"
+                    ]
+                }
+            }
         }
-      }
-    },
-    {
-      "id": "letter-1774048544314",
-      "number": 2,
-      "template": "classic",
-      "envelope": {
-        "icon": "❤️",
-        "title": "Somewhere Between Us",
-        "subtitle": "Not just friends… not quite lovers… but something that feels right",
-        "color": "#e8f5e9",
-        "borderColor": "#c0cdc1"
-      },
-      "style": {
-        "font": "Dancing Script",
-        "accentColor": "#bf3bae",
-        "titleColor": "#bf3bae",
-        "bodyColor": "#f273db",
-        "headerGradientFrom": "#ffffff",
-        "headerGradientTo": "#e8f5e9",
-        "tearColor": "#e8f5e9"
-      },
-      "content": {
-        "date": "auto",
-        "title": "A Little Confession Wrapped in Smiles ✨",
-        "salutation": "Cutieee 💗",
-        "paragraphs": [
-          "I don’t really know what to call *us* yet… but I know that whatever this is, it makes my days softer and my nights a little brighter 🌙✨",
-          "It’s funny how we started so casually, just talking, laughing, sharing random little things… and now somehow, you’ve become someone I look forward to every single day 💬💞",
-          "There’s this comfort in you… like I don’t have to pretend, don’t have to try too hard. I can just be me and somehow, that feels enough when I’m with you 🤍",
-          "Maybe we’re not labeling it yet, maybe we’re just floating somewhere in between… but I won’t lie I really, really like being here with you 🫶",
-          "And if this “in-between” slowly turns into something more someday… I think I’d like that a lot 🌸"
-        ],
-        "signOff": "Always a little more yours than I admit 🌼",
-        "name": "Sunflower 🌻",
-        "decorations": {
-          "topFlowers": [
-            "🪻",
-            "💜",
-            "🌸",
-            "🌻"
-          ],
-          "bottomFlowers": [
-            "🌷",
-            "🪻",
-            "🌷",
-            "🌻"
-          ],
-          "cornerFlowers": [
-            "🌸",
-            "🪻",
-            "✨",
-            "💜",
-            "🥰"
-          ],
-          "dividerFlower": "🌻"
-        }
-      }
-    },
-    {
-      "id": "letter-1774049123776",
-      "number": 3,
-      "template": "classic",
-      "envelope": {
-        "icon": "🌸",
-        "title": "A Letter That Traveled Miles Just for You 💌",
-        "subtitle": "Because distance can’t stop something this soft 💫",
-        "color": "#e8f5e9",
-        "borderColor": "#c0cdc1"
-      },
-      "style": {
-        "font": "Dancing Script",
-        "accentColor": "#bf3bae",
-        "titleColor": "#bf3bae",
-        "bodyColor": "#f273db",
-        "headerGradientFrom": "#ffffff",
-        "headerGradientTo": "#e8f5e9",
-        "tearColor": "#e8f5e9"
-      },
-      "content": {
-        "date": "auto",
-        "title": "If This Reaches You, Smile a Little 😊",
-        "salutation": "Hi Lavender 🪻",
-        "paragraphs": [
-          "If this were a real letter, it would probably be a little crumpled from the journey, maybe carrying a faint scent of something familiar… and definitely filled with pieces of me in every word 💌✨",
-          "But even like this, through a screen, I hope you can still feel it—the way I paused before writing your name, the way I smiled without realizing, the way you quietly took over my thoughts again 💭💗",
-          "I think what we have is kind of special… not loud, not rushed, just slowly growing in its own calm, beautiful way 🌱🤍",
-          "Sometimes I wonder… if we were in the same place, would I be handing you this letter shyly? Or teasing you while you read it? Maybe both 😌✨",
-          "Until that day comes, I’ll keep sending you these little pieces of me… words pretending to be paper, feelings pretending to be ink 🖋️💞",
-          "So whenever you read this, just know—somewhere, someone is thinking of you a little too much and smiling like an idiot because of it 😄💘"
-        ],
-        "signOff": "Folded with care and a little bit of you in every line 💭",
-        "name": "- 🌳Sunflower 🌻",
-        "decorations": {
-          "topFlowers": [
-            "🪻",
-            "💜",
-            "🌸",
-            "🌳"
-          ],
-          "bottomFlowers": [
-            "🌷",
-            "🪻",
-            "🌷",
-            "💚"
-          ],
-          "cornerFlowers": [
-            "🌸",
-            "🪻",
-            "✨",
-            "💜"
-          ],
-          "dividerFlower": "🪻"
-        }
-      }
-    }
-  ]
+    ]
 }
