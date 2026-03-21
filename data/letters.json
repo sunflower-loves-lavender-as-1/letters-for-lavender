@@ -1,65 +1,8 @@
 {
   "letters": [
     {
-      "id": "letter-1",
-      "number": 1,
-      "template": "classic",
-      "envelope": {
-        "icon": "🌸",
-        "title": "Hello",
-        "subtitle": "Just thinking of you today…",
-        "color": "#e8f5e9",
-        "borderColor": "#c0cdc1"
-      },
-      "style": {
-        "font": "Dancing Script",
-        "accentColor": "#bf3bae",
-        "titleColor": "#bf3bae",
-        "bodyColor": "#f273db",
-        "headerGradientFrom": "#ffffff",
-        "headerGradientTo": "#e8f5e9",
-        "tearColor": "#e8f5e9"
-      },
-      "content": {
-        "date": "auto",
-        "title": "Hellooooooo",
-        "salutation": "Hi Lavender 🪻",
-        "paragraphs": [
-          "It's me Sunflower 🌻",
-          "I don't know if you realize how often that happens. How a random song, a colour, a quiet moment in the evening, will quietly remind me that you exist and that somehow makes everything feel a little warmer.",
-          "I know lavender is your colour, and honestly, I think that suits you perfectly  gentle, beautiful, and with a kind of quiet magic that stays with you long after you've stopped looking. 💜",
-          "I'm not writing this because I need an answer to anything. I'm writing this because you deserve to know on a completely ordinary day that someone out here thinks the world is a much better place just because *you're* in it. 🌟",
-          "No pressure, no rush, no expectations. Just a small note to say: *hello, I'm thinking of you, and I hope your day has at least one moment that makes you smile.* 🌸",
-          "I Hope you smile when you read this letter :)"
-        ],
-        "signOff": "Pouring Love",
-        "name": "- Sunflower 🌻",
-        "decorations": {
-          "topFlowers": [
-            "🪻",
-            "💜",
-            "🌿",
-            "🌸",
-            "✨"
-          ],
-          "bottomFlowers": [
-            "🌷",
-            "🪻",
-            "🌷"
-          ],
-          "cornerFlowers": [
-            "🌸",
-            "🪻",
-            "✨",
-            "💜"
-          ],
-          "dividerFlower": "🪻"
-        }
-      }
-    },
-    {
       "id": "letter-1774048544314",
-      "number": 2,
+      "number": 1,
       "template": "classic",
       "envelope": {
         "icon": "❤️",
@@ -111,6 +54,63 @@
             "🥰"
           ],
           "dividerFlower": "🌻"
+        }
+      }
+    },
+    {
+      "id": "letter-1",
+      "number": 2,
+      "template": "classic",
+      "envelope": {
+        "icon": "🌸",
+        "title": "Hello",
+        "subtitle": "Just thinking of you today…",
+        "color": "#e8f5e9",
+        "borderColor": "#c0cdc1"
+      },
+      "style": {
+        "font": "Dancing Script",
+        "accentColor": "#bf3bae",
+        "titleColor": "#bf3bae",
+        "bodyColor": "#f273db",
+        "headerGradientFrom": "#ffffff",
+        "headerGradientTo": "#e8f5e9",
+        "tearColor": "#e8f5e9"
+      },
+      "content": {
+        "date": "auto",
+        "title": "Hellooooooo",
+        "salutation": "Hi Lavender 🪻",
+        "paragraphs": [
+          "It's me Sunflower 🌻",
+          "I don't know if you realize how often that happens. How a random song, a colour, a quiet moment in the evening, will quietly remind me that you exist and that somehow makes everything feel a little warmer.",
+          "I know lavender is your colour, and honestly, I think that suits you perfectly  gentle, beautiful, and with a kind of quiet magic that stays with you long after you've stopped looking. 💜",
+          "I'm not writing this because I need an answer to anything. I'm writing this because you deserve to know on a completely ordinary day that someone out here thinks the world is a much better place just because *you're* in it. 🌟",
+          "No pressure, no rush, no expectations. Just a small note to say: *hello, I'm thinking of you, and I hope your day has at least one moment that makes you smile.* 🌸",
+          "I Hope you smile when you read this letter :)"
+        ],
+        "signOff": "Pouring Love",
+        "name": "- Sunflower 🌻",
+        "decorations": {
+          "topFlowers": [
+            "🪻",
+            "💜",
+            "🌿",
+            "🌸",
+            "✨"
+          ],
+          "bottomFlowers": [
+            "🌷",
+            "🪻",
+            "🌷"
+          ],
+          "cornerFlowers": [
+            "🌸",
+            "🪻",
+            "✨",
+            "💜"
+          ],
+          "dividerFlower": "🪻"
         }
       }
     },
