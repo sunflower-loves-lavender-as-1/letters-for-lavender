@@ -165,56 +165,6 @@
           "dividerFlower": "🧿"
         }
       }
-    },
-    {
-      "id": "letter-1774116923883",
-      "number": 4,
-      "template": "classic",
-      "envelope": {
-        "icon": "🌸",
-        "title": "Hello",
-        "subtitle": "Test Letter",
-        "color": "#f3e5f5",
-        "borderColor": "#cbbdcd"
-      },
-      "style": {
-        "font": "Dancing Script",
-        "accentColor": "#6e42bd",
-        "titleColor": "#6e42bd",
-        "bodyColor": "#3d2d5e",
-        "headerGradientFrom": "#ffffff",
-        "headerGradientTo": "#f3e5f5",
-        "tearColor": "#f3e5f5"
-      },
-      "content": {
-        "date": "auto",
-        "title": "Hii",
-        "salutation": "Hi Lavender 🪻",
-        "paragraphs": [
-          "There goes the letter body"
-        ],
-        "signOff": "With love,",
-        "name": "— Your Admirer 💜",
-        "decorations": {
-          "topFlowers": [
-            "🪻",
-            "💜",
-            "🌸"
-          ],
-          "bottomFlowers": [
-            "🌷",
-            "🪻",
-            "🌷"
-          ],
-          "cornerFlowers": [
-            "🌸",
-            "🪻",
-            "✨",
-            "💜"
-          ],
-          "dividerFlower": "🪻"
-        }
-      }
     }
   ]
 }
