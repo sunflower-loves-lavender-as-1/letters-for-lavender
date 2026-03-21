@@ -61,7 +61,7 @@
       "number": 2,
       "template": "classic",
       "envelope": {
-        "icon": "🌸",
+        "icon": "🪻",
         "title": "Somewhere Between Us 💫",
         "subtitle": "Not just friends… not quite lovers… but something that feels right 💖",
         "color": "#fce4ec",
@@ -69,9 +69,9 @@
       },
       "style": {
         "font": "Dancing Script",
-        "accentColor": "#6e42bd",
-        "titleColor": "#6e42bd",
-        "bodyColor": "#3d2d5e",
+        "accentColor": "#c2185b",
+        "titleColor": "#c2185b",
+        "bodyColor": "#3983b1",
         "headerGradientFrom": "#ffffff",
         "headerGradientTo": "#fce4ec",
         "tearColor": "#fce4ec"
