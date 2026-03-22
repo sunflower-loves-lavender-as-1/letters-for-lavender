@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>for lavender — a moment of truth</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --lav: #b8a9c9;
+  --lav-soft: #ddd0ee;
+  --lav-pale: #f4f0fa;
+  --lav-deep: #6b5c7e;
+  --sun: #e8c84a;
+  --sun-soft: #f5e090;
+  --sun-pale: #fffbea;
+  --dark: #100d18;
+  --dark2: #1c1728;
+  --text: #2a2030;
+  --text-mid: #5a4d66;
+  --text-soft: #9a8daa;
+  --white: #ffffff;
+  --bg: #faf8fd;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{font-family:'Jost',sans-serif;font-weight:200;background:var(--bg);color:var(--text);overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;}
+
+section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px 24px;position:relative;}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.9s ease,transform 0.9s ease;}
+.reveal.up{opacity:1;transform:translateY(0);}
+.reveal.d1{transition-delay:.15s}.reveal.d2{transition-delay:.3s}.reveal.d3{transition-delay:.45s}.reveal.d4{transition-delay:.6s}
+
+.tag{font-size:.65rem;letter-spacing:.42em;text-transform:uppercase;color:var(--text-soft);margin-bottom:20px;}
+
+.petal{position:fixed;pointer-events:none;opacity:0;animation:petalFall linear infinite;z-index:0;}
+@keyframes petalFall{0%{transform:translateY(-30px) rotate(0deg) scale(.8);opacity:0}8%{opacity:.35}92%{opacity:.18}100%{transform:translateY(108vh) rotate(400deg) scale(1.1);opacity:0}}
+
+/* §1 */
+#s1{background:linear-gradient(155deg,#f0ebff 0%,var(--bg) 45%,#fffbea 100%);text-align:center;}
+.intro-eyebrow{font-size:.68rem;letter-spacing:.4em;text-transform:uppercase;color:var(--text-soft);animation:fadeUp 1s ease .4s both;}
+.intro-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,14vw,9rem);font-weight:300;line-height:.92;margin:18px 0 10px;animation:fadeUp 1.2s ease .8s both;}
+.intro-h1 em{font-style:italic;color:var(--lav-deep);}
+.intro-sub{font-size:clamp(.95rem,2.5vw,1.1rem);color:var(--text-soft);font-style:italic;max-width:380px;line-height:1.7;animation:fadeUp 1s ease 1.2s both;margin-top:8px;}
+.scroll-cue{position:absolute;bottom:36px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp 1s ease 2.2s both;}
+.scroll-cue span{font-size:.62rem;letter-spacing:.35em;text-transform:uppercase;color:var(--text-soft);}
+.scroll-cue-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--lav),transparent);animation:pulse 2.2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:.25}50%{opacity:1}}
+.deco{position:absolute;pointer-events:none;opacity:.07;font-size:7rem;}
+.deco.tl{top:30px;left:10px;transform:rotate(-25deg);}
+.deco.br{bottom:50px;right:10px;transform:rotate(20deg);font-size:10rem;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* §2 */
+#s2{background:var(--white);gap:52px;}
+.quote-block{max-width:600px;width:100%;padding:36px 44px;background:var(--lav-pale);border-left:2px solid var(--lav-soft);position:relative;}
+.quote-block::before{content:'\201C';font-family:'Cormorant Garamond',serif;font-size:6rem;color:var(--lav-soft);position:absolute;top:-14px;left:18px;line-height:1;}
+.quote-block p{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,3vw,1.35rem);font-style:italic;font-weight:300;line-height:1.85;color:var(--text-mid);}
+.quote-sign{margin-top:18px;text-align:right;font-size:.8rem;letter-spacing:.1em;color:var(--text-soft);}
+.quote-sign .s{color:var(--sun);font-size:1rem;}
+
+/* §3 */
+#s3{background:linear-gradient(150deg,#110e1c 0%,#1e1830 100%);color:var(--lav-soft);text-align:center;gap:36px;}
+.dark-h{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,8vw,5.5rem);font-weight:300;line-height:1.1;color:var(--lav-soft);}
+.dark-h em{font-style:italic;color:var(--sun-soft);}
+.divider-flowers{display:flex;align-items:center;gap:18px;font-size:1.6rem;}
+.divider-flowers .line{width:50px;height:1px;background:var(--lav-deep);}
+.dark-p{max-width:480px;font-size:clamp(1rem,2.5vw,1.15rem);line-height:2;font-style:italic;color:var(--lav-soft);opacity:.72;}
+
+/* §4 */
+#s4{background:var(--bg);gap:48px;}
+.weight-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,6vw,4rem);font-weight:300;text-align:center;line-height:1.15;max-width:520px;}
+.lines-list{max-width:560px;width:100%;display:flex;flex-direction:column;gap:18px;}
+.line-item{display:flex;gap:16px;align-items:flex-start;opacity:0;transform:translateX(-18px);transition:opacity .55s ease,transform .55s ease;}
+.line-item.up{opacity:1;transform:translateX(0);}
+.line-dot{width:5px;height:5px;border-radius:50%;background:var(--lav);margin-top:11px;flex-shrink:0;}
+.line-item p{font-size:clamp(.98rem,2.5vw,1.1rem);line-height:1.8;color:var(--text-mid);font-weight:400;}
+
+/* §5 */
+#s5{background:linear-gradient(160deg,#f8f3ff 0%,#fffaea 100%);text-align:center;gap:30px;}
+.between-h{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,7vw,5rem);font-weight:300;line-height:1.15;max-width:600px;}
+.between-h .lv{color:var(--lav-deep);font-style:italic;}
+.between-h .sn{color:#a8860a;font-style:italic;}
+.between-p{max-width:500px;font-size:clamp(1rem,2.4vw,1.12rem);line-height:2;color:var(--text-mid);font-style:italic;}
+.vert-line{width:1px;height:56px;background:linear-gradient(to bottom,var(--lav),transparent);}
+
+/* §6 CHOICE */
+#s6{background:linear-gradient(160deg,#0d0b17 0%,#17121f 100%);text-align:center;gap:36px;min-height:100vh;}
+.choice-eyebrow{font-size:.65rem;letter-spacing:.42em;text-transform:uppercase;color:var(--lav-deep);}
+.choice-h{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,7vw,5rem);font-weight:300;color:var(--lav-soft);line-height:1.1;max-width:580px;}
+.choice-h em{font-style:italic;color:var(--sun-soft);}
+.choice-sub{max-width:440px;font-size:clamp(.95rem,2.4vw,1.05rem);line-height:1.9;color:var(--lav-soft);opacity:.6;font-style:italic;}
+.choice-buttons{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:8px;}
+.choice-btn{position:relative;padding:18px 44px;font-family:'Jost',sans-serif;font-size:.82rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;border:none;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease;overflow:hidden;}
+.choice-btn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s ease;}
+.choice-btn:hover{transform:translateY(-3px);}
+.choice-btn:hover::before{opacity:1;}
+.btn-nial{background:transparent;color:var(--lav-soft);border:1px solid var(--lav-deep);}
+.btn-nial::before{background:linear-gradient(135deg,rgba(184,169,201,.12),rgba(184,169,201,.06));}
+.btn-nial:hover{box-shadow:0 8px 30px rgba(184,169,201,.2);border-color:var(--lav-soft);}
+.btn-him{background:transparent;color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.12);}
+.btn-him::before{background:rgba(255,255,255,.04);}
+.btn-him:hover{box-shadow:0 8px 30px rgba(255,255,255,.06);color:rgba(255,255,255,.5);}
+.choice-note{font-size:.85rem;letter-spacing:.1em;color:var(--lav-deep);font-style:italic;}
+
+/* OUTCOME */
+#outcome{display:none;position:fixed;inset:0;z-index:1000;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 24px;gap:28px;opacity:0;transition:opacity 1.2s ease;}
+#outcome.show{display:flex;}
+#outcome.fade-in{opacity:1;}
+#outcome.chose-nial{background:linear-gradient(155deg,#0d0b17 0%,#1a1430 100%);}
+#outcome.chose-him{background:linear-gradient(155deg,#0f0f0f 0%,#1a1a1a 100%);}
+.outcome-symbol{font-size:3rem;animation:symbolFloat 3s ease infinite;}
+@keyframes symbolFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.outcome-h{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,8vw,5rem);font-weight:300;line-height:1.1;}
+.chose-nial .outcome-h{color:var(--lav-soft);}
+.chose-nial .outcome-h em{color:var(--sun-soft);font-style:italic;}
+.chose-him .outcome-h{color:rgba(255,255,255,.5);}
+.chose-him .outcome-h em{font-style:italic;color:rgba(255,255,255,.3);}
+.outcome-p{max-width:460px;font-size:clamp(1rem,2.5vw,1.12rem);line-height:1.95;font-style:italic;}
+.chose-nial .outcome-p{color:var(--lav-soft);opacity:.78;}
+.chose-him .outcome-p{color:rgba(255,255,255,.38);}
+.outcome-sign{font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;}
+.chose-nial .outcome-sign{color:var(--lav-deep);}
+.chose-him .outcome-sign{color:rgba(255,255,255,.2);}
+
+/* burst */
+.burst-petal{position:fixed;pointer-events:none;font-size:1.2rem;animation:burst linear forwards;z-index:1001;}
+@keyframes burst{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) rotate(var(--rot)) scale(.4)}}
+
+/* lock */
+#lock-overlay{display:none;position:fixed;inset:0;background:rgba(10,8,16,.6);backdrop-filter:blur(4px);z-index:500;justify-content:center;align-items:center;flex-direction:column;gap:16px;text-align:center;padding:24px;}
+#lock-overlay.show{display:flex;}
+.lock-box{background:rgba(255,255,255,.04);border:1px solid rgba(184,169,201,.2);padding:44px 48px;max-width:420px;width:100%;}
+.lock-box h3{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,5vw,2.4rem);font-weight:300;color:var(--lav-soft);line-height:1.2;margin-bottom:12px;}
+.lock-box p{font-size:.9rem;color:var(--text-soft);font-style:italic;line-height:1.7;margin-bottom:28px;}
+.lock-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.lock-confirm,.lock-cancel{padding:13px 32px;font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;}
+.lock-confirm{background:var(--lav-deep);color:var(--lav-pale);}
+.lock-confirm:hover{background:var(--lav);}
+.lock-cancel{background:transparent;color:var(--text-soft);border:1px solid rgba(255,255,255,.1);}
+.lock-cancel:hover{color:var(--lav-soft);border-color:rgba(184,169,201,.3);}
+
+@media(max-width:480px){
+  .quote-block{padding:26px 22px;}
+  .choice-buttons{flex-direction:column;align-items:center;}
+  .choice-btn{width:100%;max-width:260px;}
+  .lock-box{padding:32px 24px;}
+  .lock-btns{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<div id="petals-container"></div>
+
+<!-- LOCK OVERLAY -->
+<div id="lock-overlay">
+  <div class="lock-box">
+    <h3 id="lock-title"></h3>
+    <p id="lock-msg"></p>
+    <div class="lock-btns">
+      <button class="lock-confirm" id="lock-confirm">Yes, this is my answer</button>
+      <button class="lock-cancel" id="lock-cancel">I need more time</button>
+    </div>
+  </div>
+</div>
+
+<!-- OUTCOME -->
+<div id="outcome">
+  <div class="outcome-symbol" id="outcome-symbol"></div>
+  <h2 class="outcome-h" id="outcome-h"></h2>
+  <p class="outcome-p" id="outcome-p"></p>
+  <p class="outcome-p" id="outcome-p2" style="margin-top:12px;"></p>
+  <p class="outcome-sign" id="outcome-sign"></p>
+</div>
+
+<!-- §1 INTRO -->
+<section id="s1">
+  <div class="deco tl">🌻</div>
+  <div class="deco br">🪻</div>
+  <p class="intro-eyebrow">a letter from sunflower</p>
+  <h1 class="intro-h1">for<br><em>lavender</em></h1>
+  <p class="intro-sub">I've been holding a lot. So I wrote it down — honestly, clearly, and with care.</p>
+  <div class="scroll-cue">
+    <span>read this slowly</span>
+    <div class="scroll-cue-line"></div>
+  </div>
+</section>
+
+<!-- §2 WHAT WE HAVE -->
+<section id="s2">
+  <p class="tag reveal">what we have</p>
+  <div class="quote-block reveal d1">
+    <p>I think about you in quiet moments — between one thought and the next, in the middle of a song, before I fall asleep. You became someone I didn't know how to not think about. That wasn't a choice. It just happened. You happened.</p>
+    <p class="quote-sign"><span class="s">🌻</span> Sunflower</p>
+  </div>
+  <div class="quote-block reveal d2">
+    <p>The late nights. The things only we understand. The version of me that feels most natural around you. Whatever this is — I didn't build it alone. We built it together. And that means something.</p>
+    <p class="quote-sign"><span class="s">🌻</span> Sunflower</p>
+  </div>
+</section>
+
+<!-- §3 WHAT THIS IS -->
+<section id="s3">
+  <h2 class="dark-h reveal">we are something<br><em>real.</em></h2>
+  <div class="divider-flowers reveal d1"><div class="line"></div><span>🪻</span><div class="line"></div></div>
+  <p class="dark-p reveal d2">Not strangers. Not just friends. Not nothing. What we have doesn't have a clean name — but it's real, and it has history. I think you know that too.</p>
+</section>
+
+<!-- §4 THE WEIGHT -->
+<section id="s4">
+  <h2 class="weight-title reveal">what I need<br>to be honest about</h2>
+  <p class="tag reveal d1" style="color:var(--text-soft);margin-top:-20px;">not blame. just clarity.</p>
+  <div class="lines-list">
+    <div class="line-item"><div class="line-dot"></div><p>I can't keep reading between the lines — wondering where we stand from one day to the next.</p></div>
+    <div class="line-item"><div class="line-dot"></div><p>I care about you deeply, but I can't stay in something undefined anymore.</p></div>
+    <div class="line-item"><div class="line-dot"></div><p>Being emotionally present without any clarity — that's not something I can keep doing.</p></div>
+    <div class="line-item"><div class="line-dot"></div><p>This isn't about fault. It's about what's fair — to both of us.</p></div>
+    <div class="line-item"><div class="line-dot"></div><p>I can't continue in a situation without clarity. I deserve to know where I stand.</p></div>
+  </div>
+</section>
+
+<!-- §5 IN-BETWEEN -->
+<section id="s5">
+  <h2 class="between-h reveal"><span class="lv">lavender</span> &amp; <span class="sn">sunflower</span><br>can't grow<br>in between.</h2>
+  <div class="vert-line reveal d1"></div>
+  <p class="between-p reveal d2">Too close to be strangers. Too much history to be nothing. Too complicated to stay undefined. I can't keep existing in the middle — it's not fair to either of us.</p>
+  <p class="between-p reveal d3" style="margin-top:8px;">This isn't anger. This isn't pressure. This is me being honest about what I need — and asking, clearly, for the same honesty in return.</p>
+</section>
+
+<!-- §6 THE CHOICE -->
+<section id="s6">
+  <p class="choice-eyebrow reveal">a moment of truth</p>
+  <h2 class="choice-h reveal d1">there are two paths,<br><em>Lavender.</em></h2>
+  <p class="choice-sub reveal d2">Take all the time you need before you decide. But when you're ready — this is the moment. One choice, made clearly and honestly.</p>
+  <div class="choice-buttons reveal d3">
+    <button class="choice-btn btn-nial" id="btn-nial">🌻 &nbsp; I choose you</button>
+    <button class="choice-btn btn-him" id="btn-him">I choose my current relationship</button>
+  </div>
+  <p class="choice-note reveal d4">both answers are valid. both will be respected.</p>
+  <p class="choice-note reveal d4" style="margin-top:4px; opacity:0.5;">if you're not ready to choose, that's okay. but I won't stay in the middle anymore.</p>
+</section>
+
+<script>
+// PETALS
+const pc = document.getElementById('petals-container');
+['🪻','🌸','✦','·','˚'].forEach(s=>{
+  for(let i=0;i<4;i++){
+    const p=document.createElement('div');
+    p.className='petal';
+    p.textContent=s;
+    p.style.cssText=`left:${Math.random()*100}vw;font-size:${.55+Math.random()*.9}rem;animation-duration:${9+Math.random()*15}s;animation-delay:${Math.random()*15}s`;
+    pc.appendChild(p);
+  }
+});
+
+// REVEAL OBSERVER
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('up');io.unobserve(e.target);} });
+},{threshold:.18});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// LINE ITEMS STAGGER
+const lio = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('.line-item').forEach((el,i)=>setTimeout(()=>el.classList.add('up'),i*160));
+      lio.unobserve(e.target);
+    }
+  });
+},{threshold:.2});
+const ll = document.querySelector('.lines-list');
+if(ll) lio.observe(ll);
+
+// CHOICE
+let pending = null;
+const lockEl = document.getElementById('lock-overlay');
+
+document.getElementById('btn-nial').addEventListener('click',()=>{
+  pending='nial';
+  document.getElementById('lock-title').textContent='Is this your clear decision?';
+  document.getElementById('lock-msg').textContent='Make sure this is your clear and final decision — not something temporary, not made under pressure. Take a breath. If this is truly what you want, then it\'s the right answer.';
+  lockEl.classList.add('show');
+});
+
+document.getElementById('btn-him').addEventListener('click',()=>{
+  pending='him';
+  document.getElementById('lock-title').textContent='Is this your clear decision?';
+  document.getElementById('lock-msg').textContent='Make sure this is your clear and final decision — not something temporary, not made under pressure. Take a breath. If this is truly what you want, then it\'s the right answer.';
+  lockEl.classList.add('show');
+});
+
+document.getElementById('lock-cancel').addEventListener('click',()=>{
+  pending=null;
+  lockEl.classList.remove('show');
+});
+
+document.getElementById('lock-confirm').addEventListener('click',()=>{
+  lockEl.classList.remove('show');
+  pending==='nial' ? showNial() : showHim();
+});
+
+function showNial(){
+  const o=document.getElementById('outcome');
+  o.className='show chose-nial';
+  document.getElementById('outcome-symbol').textContent='🌻🪻';
+  document.getElementById('outcome-h').innerHTML='thank you<br>for being <em>honest.</em>';
+  document.getElementById('outcome-p').textContent="If you truly choose me, come to me when you're free. Then we can start something real — the right way, without anything in between.";
+  document.getElementById('outcome-p2').textContent="There's no rush. I'll be here when the time is right.";
+  document.getElementById('outcome-sign').innerHTML='with care &nbsp;·&nbsp; 🌻 sunflower';
+  setTimeout(()=>o.classList.add('fade-in'),50);
+  burst();
+}
+
+function showHim(){
+  const o=document.getElementById('outcome');
+  o.className='show chose-him';
+  document.getElementById('outcome-symbol').textContent='🪻';
+  document.getElementById('outcome-h').innerHTML='I understand.<br><em>Take care of yourself.</em>';
+  document.getElementById('outcome-p').textContent="I'll step back now, and I mean that with no bitterness. What we had was real, and I won't diminish it. I just needed to know.";
+  document.getElementById('outcome-p2').textContent="I hope you find what you're looking for. Genuinely.";
+  document.getElementById('outcome-sign').innerHTML='take care &nbsp;·&nbsp; sunflower 🌻';
+  setTimeout(()=>o.classList.add('fade-in'),50);
+}
+
+function burst(){
+  const cx=window.innerWidth/2, cy=window.innerHeight/2;
+  const ps=['🪻','🌸','✨','🌻','✦','🌷','💜'];
+  for(let i=0;i<45;i++){
+    const p=document.createElement('div');
+    p.className='burst-petal';
+    p.textContent=ps[Math.floor(Math.random()*ps.length)];
+    const angle=Math.random()*Math.PI*2, dist=100+Math.random()*320;
+    p.style.cssText=`left:${cx}px;top:${cy}px;--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;--rot:${-180+Math.random()*360}deg;font-size:${.8+Math.random()*1.3}rem;animation-duration:${1.2+Math.random()*1.1}s;animation-delay:${Math.random()*.5}s`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),3000);
+  }
+}
+</script>
+</body>
+</html>
