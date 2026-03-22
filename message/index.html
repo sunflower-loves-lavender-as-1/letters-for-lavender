@@ -243,8 +243,24 @@ section{min-height:100vh;display:flex;flex-direction:column;justify-content:cent
   <p class="choice-note reveal d4" style="margin-top:4px; opacity:0.5;">if you're not ready to choose, that's okay. but I won't stay in the middle anymore.</p>
 </section>
 
-<script>
-// PETALS
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+// ── FIREBASE INIT ──
+const firebaseConfig = {
+  apiKey: "AIzaSyAzAoss0Thu4x13NvR0fb-dGgkFslwEEHg",
+  authDomain: "lavender-sunflower.firebaseapp.com",
+  projectId: "lavender-sunflower",
+  storageBucket: "lavender-sunflower.firebasestorage.app",
+  messagingSenderId: "687581320147",
+  appId: "1:687581320147:web:237545771dbb006a3cd526"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const CHOICE_DOC = doc(db, 'choice', 'gauri');
+
+// ── PETALS ──
 const pc = document.getElementById('petals-container');
 ['🪻','🌸','✦','·','˚'].forEach(s=>{
   for(let i=0;i<4;i++){
@@ -256,13 +272,13 @@ const pc = document.getElementById('petals-container');
   }
 });
 
-// REVEAL OBSERVER
+// ── REVEAL OBSERVER ──
 const io = new IntersectionObserver(entries=>{
   entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('up');io.unobserve(e.target);} });
 },{threshold:.18});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-// LINE ITEMS STAGGER
+// ── LINE ITEMS STAGGER ──
 const lio = new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting){
@@ -274,7 +290,23 @@ const lio = new IntersectionObserver(entries=>{
 const ll = document.querySelector('.lines-list');
 if(ll) lio.observe(ll);
 
-// CHOICE
+// ── CHECK FOR EXISTING CHOICE ON LOAD ──
+async function checkExistingChoice() {
+  try {
+    const snap = await getDoc(CHOICE_DOC);
+    if (snap.exists()) {
+      const saved = snap.data().choice;
+      // Choice already made — show outcome immediately, no scrolling
+      if (saved === 'nial') showNial(false);
+      else if (saved === 'him') showHim(false);
+    }
+  } catch(e) {
+    console.error('Firebase read error:', e);
+  }
+}
+checkExistingChoice();
+
+// ── CHOICE LOGIC ──
 let pending = null;
 const lockEl = document.getElementById('lock-overlay');
 
@@ -297,12 +329,25 @@ document.getElementById('lock-cancel').addEventListener('click',()=>{
   lockEl.classList.remove('show');
 });
 
-document.getElementById('lock-confirm').addEventListener('click',()=>{
+document.getElementById('lock-confirm').addEventListener('click', async ()=>{
   lockEl.classList.remove('show');
-  pending==='nial' ? showNial() : showHim();
+  const choice = pending;
+
+  // Save to Firebase permanently
+  try {
+    await setDoc(CHOICE_DOC, {
+      choice: choice,
+      timestamp: new Date().toISOString()
+    });
+  } catch(e) {
+    console.error('Firebase write error:', e);
+  }
+
+  choice === 'nial' ? showNial(true) : showHim(true);
 });
 
-function showNial(){
+// ── OUTCOME SCREENS ──
+function showNial(animate){
   const o=document.getElementById('outcome');
   o.className='show chose-nial';
   document.getElementById('outcome-symbol').textContent='🌻🪻';
@@ -310,11 +355,11 @@ function showNial(){
   document.getElementById('outcome-p').textContent="If you truly choose me, come to me when you're free. Then we can start something real — the right way, without anything in between.";
   document.getElementById('outcome-p2').textContent="There's no rush. I'll be here when the time is right.";
   document.getElementById('outcome-sign').innerHTML='with care &nbsp;·&nbsp; 🌻 sunflower';
-  setTimeout(()=>o.classList.add('fade-in'),50);
-  burst();
+  setTimeout(()=>o.classList.add('fade-in'), animate ? 50 : 300);
+  if(animate) burst();
 }
 
-function showHim(){
+function showHim(animate){
   const o=document.getElementById('outcome');
   o.className='show chose-him';
   document.getElementById('outcome-symbol').textContent='🪻';
@@ -322,9 +367,10 @@ function showHim(){
   document.getElementById('outcome-p').textContent="I'll step back now, and I mean that with no bitterness. What we had was real, and I won't diminish it. I just needed to know.";
   document.getElementById('outcome-p2').textContent="I hope you find what you're looking for. Genuinely.";
   document.getElementById('outcome-sign').innerHTML='take care &nbsp;·&nbsp; sunflower 🌻';
-  setTimeout(()=>o.classList.add('fade-in'),50);
+  setTimeout(()=>o.classList.add('fade-in'), animate ? 50 : 300);
 }
 
+// ── BURST PETALS ──
 function burst(){
   const cx=window.innerWidth/2, cy=window.innerHeight/2;
   const ps=['🪻','🌸','✨','🌻','✦','🌷','💜'];
