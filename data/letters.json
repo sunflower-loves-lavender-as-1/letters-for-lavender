@@ -165,6 +165,66 @@
           "dividerFlower": "🧿"
         }
       }
+    },
+    {
+      "id": "letter-1774277103178",
+      "number": 4,
+      "template": "classic",
+      "envelope": {
+        "icon": "💚",
+        "title": "I Meant It When I Said I’ll Wait",
+        "subtitle": "Not because I have to… but because I want to",
+        "color": "#72ac62",
+        "borderColor": "#4a843a"
+      },
+      "style": {
+        "font": "Pacifico",
+        "accentColor": "#00695c",
+        "titleColor": "#00695c",
+        "bodyColor": "#000000",
+        "headerGradientFrom": "#90ca80",
+        "headerGradientTo": "#72ac62",
+        "tearColor": "#72ac62"
+      },
+      "content": {
+        "date": "auto",
+        "title": "For the Time That Stands Still",
+        "salutation": "Gauri My Love",
+        "paragraphs": [
+          "I keep replaying that moment in my head — when I told you I’ll wait.\nAnd the strange thing is… I didn’t say it out of hope. I said it out of truth.",
+          "Because what I feel for you doesn’t really depend on outcomes anymore.\nIt’s not about whether you choose me today, tomorrow, or never.\nIt just… exists. Quietly. Constantly.",
+          "Maybe it sounds dumb.\nLoving someone without knowing if they’ll ever come back to you the same way.\nBut if I’m being honest, I don’t even see it as waiting in the painful sense.\nI’m just living my life… with a part of my heart that still speaks your name softly.",
+          "I’m not holding you back.\nI’m not asking you to hurry.\nAnd I’m not standing still either.",
+          "I’m just… here.\nWith something real. Something I didn’t force, didn’t plan, didn’t even understand when it started.",
+          "So take your time.\nFigure things out the way you need to.",
+          "And if one day you look back and find me still somewhere in your thoughts…\njust know, I never pretended about what I felt for you.",
+          "I meant it.\nEvery word of it."
+        ],
+        "signOff": "Still here, still real.",
+        "name": "— The Selfish Flower You never liked.",
+        "decorations": {
+          "topFlowers": [
+            "🌿",
+            "🍃",
+            "🌱"
+          ],
+          "bottomFlowers": [
+            "🌷",
+            "🪻",
+            "🌷",
+            "🌳",
+            "🪴",
+            "🍁"
+          ],
+          "cornerFlowers": [
+            "🌸",
+            "🪻",
+            "✨",
+            "💜"
+          ],
+          "dividerFlower": "🪻"
+        }
+      }
     }
   ]
 }
