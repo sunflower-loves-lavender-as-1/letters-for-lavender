@@ -174,17 +174,17 @@
         "icon": "💚",
         "title": "I Meant It When I Said I’ll Wait",
         "subtitle": "Not because I have to… but because I want to",
-        "color": "#72ac62",
-        "borderColor": "#4a843a"
+        "color": "#9cd48c",
+        "borderColor": "#74ac64"
       },
       "style": {
-        "font": "Pacifico",
+        "font": "Dancing Script",
         "accentColor": "#00695c",
         "titleColor": "#00695c",
         "bodyColor": "#000000",
-        "headerGradientFrom": "#90ca80",
-        "headerGradientTo": "#72ac62",
-        "tearColor": "#72ac62"
+        "headerGradientFrom": "#baf2aa",
+        "headerGradientTo": "#9cd48c",
+        "tearColor": "#9cd48c"
       },
       "content": {
         "date": "auto",
