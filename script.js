@@ -572,22 +572,10 @@ function playTrack(idx) {
     document.querySelectorAll(".pl-item").forEach((el, i) => el.classList.toggle("active", i === idx));
 
     try {
-        // Stop any current playback, then cue and play
-        musicYT.stopVideo();
-        setTimeout(() => {
-            try {
-                musicYT.cueVideoById(t.ytId);
-                setTimeout(() => {
-                    try {
-                        musicYT.playVideo();
-                        mpPlaying = true;
-                        _mpPlayIcon(true);
-                        _mpUpdDur();
-                        console.log("Playing now");
-                    } catch (e) { console.warn("playVideo error:", e); }
-                }, 200);
-            } catch (e) { console.warn("cueVideoById error:", e); }
-        }, 100);
+        musicYT.loadVideoById(t.ytId);
+        mpPlaying = true;
+        _mpPlayIcon(true);
+        _mpUpdDur();
     } catch (e) { console.warn("playTrack error:", e); }
 }
 
@@ -791,3 +779,5 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("scroll", () => {
     document.getElementById("scroll-top").classList.toggle("show", scrollY > 280);
 });
+
+
