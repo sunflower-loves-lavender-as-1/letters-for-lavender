@@ -226,6 +226,64 @@
           "dividerFlower": "🪻"
         }
       }
+    },
+    {
+      "id": "letter-1774441601518",
+      "number": 5,
+      "template": "classic",
+      "envelope": {
+        "icon": "💛",
+        "title": "I just can't stop staring",
+        "subtitle": "I don't know what to write :)",
+        "color": "#fff3e0",
+        "borderColor": "#d7cbb8"
+      },
+      "style": {
+        "font": "Dancing Script",
+        "accentColor": "#dadc50",
+        "titleColor": "#dadc50",
+        "bodyColor": "#cdce82",
+        "headerGradientFrom": "#fffffe",
+        "headerGradientTo": "#fff3e0",
+        "tearColor": "#fff3e0"
+      },
+      "content": {
+        "date": "auto",
+        "title": "-",
+        "salutation": "Hi Princess :)",
+        "paragraphs": [
+          "I saw your profile picture....\nFern Green dress, a yellow flower, posing like a queen, the bindi on your forehead...\nAnd that's Interesting....",
+          "I don’t know how you do that.\nThe way you smile like it’s nothing, but somehow it becomes everything for the person looking at it.",
+          "I’ve spent more time staring at your photo than I’d ever admit out loud. It’s because every time I look at you, I start to lose myself in the 'what ifs,' imagining exactly how it would feel if there were no distance between us.",
+          "There’s something about this picture...\nthe colors of your dress, the calmness in your face, the way everything just fits so naturally…\nlike this moment wasn’t created, it just happened and somehow turned perfect.\nLike Damn G-san...",
+          "I didn’t plan to sit and stare.\nBut here I am… doing exactly that.",
+          "The flowers are lovely, but my eyes only see you. You still look exactly as you did the first time I saw you...perfect in every detail, from your smile to the way you look at the world.",
+          "In case if you never read this...\nRemember that I love you. I love you for all the lives I'll live. I love you with freedom.",
+          "If loving you quietly is all I’m allowed to do,\nI’d still choose that… every time. every day, in every life.",
+          "For context—if you ever read this, just not on the day I wrote it…\nI was talking about that profile picture of yours.\nYou were sitting in an audi, I think… wearing that fern-dark green dress with those delicate leaf patterns repeating so perfectly.\nYou were smiling—soft, effortless, the kind that doesn’t try but still stays.\nLooking straight into the camera, with that tiny bindi resting right between your eyebrows…\nand that beautiful yellow flower tucked by your left ear.\n\nAnd somehow, in the middle of all that…\nyou still managed to look more beautiful than all of it put together."
+        ],
+        "signOff": "With all the love,",
+        "name": "The Forbidden Flower",
+        "decorations": {
+          "topFlowers": [
+            "🌻",
+            "🌳",
+            "🧿"
+          ],
+          "bottomFlowers": [
+            "🌷",
+            "🪻",
+            "🌷"
+          ],
+          "cornerFlowers": [
+            "🌸",
+            "🪻",
+            "✨",
+            "💜"
+          ],
+          "dividerFlower": "💛"
+        }
+      }
     }
   ]
 }
